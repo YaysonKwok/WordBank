@@ -14,6 +14,7 @@ namespace WordBank
         static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
         protected void Page_Load(object sender, EventArgs e)
         {
+            connection.Open();
             if (Session["UsernameID"] == null)
             {
                 Response.Redirect("Login.aspx");
@@ -115,6 +116,11 @@ namespace WordBank
         protected void Clear()
         {
             AnswerList.Items.Clear();
+        }
+
+        protected void Page_Unload(object sender, EventArgs e)
+        {
+            connection.Close();
         }
     }
 }

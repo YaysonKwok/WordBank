@@ -16,6 +16,7 @@ namespace WordBank
         protected void Page_Load(object sender, EventArgs e)
         {
             connection.Open();
+            Session["InputRedirect"] = false;
         }
 
         protected void SignInBtn_Click(object sender, EventArgs e)

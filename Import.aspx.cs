@@ -17,7 +17,7 @@ namespace WordBank
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            connection.Open();
+
             if (Session["UsernameID"] == null)
             {
                 Response.Redirect("Login.aspx");
@@ -26,41 +26,53 @@ namespace WordBank
 
         protected void UploadBtn_Click(object sender, EventArgs e)
         {
-            DataTable dt = new DataTable();
+            connection.Open();
+            DataTable DataTable = new DataTable();
             if (IsPostBack && Upload.HasFile)
             {
                 var parser = new TextFieldParser(Upload.FileContent);
                 parser.SetDelimiters(new string[] { "," });
-                dt.Columns.Add("UserID", typeof(int));
-                dt.Columns.Add("Word", typeof(String));
-                dt.Columns.Add("Definition", typeof(String));
-                dt.Columns.Add("Sentence1", typeof(String));
-
-                foreach (DataRow dr in dt.Rows)
-                {
-                    dr["UserID"] = Session["UsernameID"];
-                }
+                DataTable.Columns.Add("UserID");
+                DataTable.Columns["UserID"].DefaultValue = Session["UserID"];
+                DataTable.Columns.Add("Word");
+                DataTable.Columns.Add("Definition");
+                DataTable.Columns.Add("Sentence1");
 
                 while (!parser.EndOfData)
                 {
                     string[] fieldData = parser.ReadFields();
-                    for (int i = 0; i < fieldData.Length; i++)
+                    DataTable.Rows.Add(fieldData);
+                }
+
+                GridView.DataSource = DataTable;
+                GridView.DataBind();
+
+                using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection))
+                {
+                    bulkCopy.DestinationTableName = "WordBank";
+                    try
                     {
-                        if (fieldData[i] == "")
-                        {
-                            dt.Rows.Add(fieldData);
-                        }
+                        SqlBulkCopyColumnMapping UserID = new SqlBulkCopyColumnMapping("UserID", "UserID");
+                        bulkCopy.ColumnMappings.Add(UserID);
+
+                        SqlBulkCopyColumnMapping Word = new SqlBulkCopyColumnMapping("Word", "Word");
+                        bulkCopy.ColumnMappings.Add(Word);
+
+                        SqlBulkCopyColumnMapping Definition = new SqlBulkCopyColumnMapping("Definition", "Definition");
+                        bulkCopy.ColumnMappings.Add(Definition);
+
+                        SqlBulkCopyColumnMapping Sentence1 = new SqlBulkCopyColumnMapping("Sentence1", "Sentence1");
+                        bulkCopy.ColumnMappings.Add(Sentence1);
+
+                        bulkCopy.WriteToServer(DataTable);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
                     }
                     
                 }
-                var table = "WordBank";
-                using (connection)
-                {
-                    var bulkCopy = new SqlBulkCopy(connection);
-                    bulkCopy.DestinationTableName = table;
-                    bulkCopy.WriteToServer(dt);
-                    Label1.Text = "success";
-                }
+
             }
             else
             {

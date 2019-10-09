@@ -20,14 +20,14 @@ namespace WordBank
             {
                 Response.Redirect("Login.aspx");
             }
-
-            SqlCommand Data = new SqlCommand("SELECT Word, Definition, Sentence1, CorrectWord, WordAttempts, CorrectDefinition, DefinitionAttempts FROM WordBank WHERE UserID = @UsernameID", connection);
-            Data.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
-
-            SqlDataReader reader = Data.ExecuteReader();
-            GridView.DataSource = reader;
-            GridView.DataBind();
-            connection.Close();
+            using (SqlCommand Data = new SqlCommand("SELECT Word, Definition, Sentence1, CorrectWord, WordAttempts, CorrectDefinition, DefinitionAttempts FROM WordBank WHERE UserID = @UsernameID", connection))
+            {
+                Data.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
+                SqlDataReader reader = Data.ExecuteReader();
+                GridView.DataSource = reader;
+                GridView.DataBind();
+                connection.Close();
+            }
         }
     }
 }

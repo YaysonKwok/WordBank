@@ -33,7 +33,7 @@ namespace WordBank
                 var parser = new TextFieldParser(Upload.FileContent);
                 parser.SetDelimiters(new string[] { "," });
                 DataTable.Columns.Add("UserID");
-                DataTable.Columns["UserID"].DefaultValue = Session["UserID"];
+                DataTable.Columns["UserID"].DefaultValue = Session["UsernameID"];
                 DataTable.Columns.Add("Word");
                 DataTable.Columns.Add("Definition");
                 DataTable.Columns.Add("Sentence1");
@@ -41,7 +41,13 @@ namespace WordBank
                 while (!parser.EndOfData)
                 {
                     string[] fieldData = parser.ReadFields();
-                    DataTable.Rows.Add(fieldData);
+                    DataRow newRow = DataTable.NewRow();
+                    newRow["Word"] = fieldData[0];
+                    newRow["Definition"] = fieldData[1];
+                    newRow["Sentence1"] = fieldData[2];
+
+                    DataTable.Rows.Add(newRow);
+
                 }
 
                 GridView.DataSource = DataTable;
@@ -72,7 +78,6 @@ namespace WordBank
                     }
                     
                 }
-
             }
             else
             {

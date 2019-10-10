@@ -51,20 +51,20 @@
                     <ul class="nav navbar-nav">
                         <li><a runat="server" href="~/"> Home</a></li>
                         <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Input New Words<span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Data Entry<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                              <li><a runat="server" href="~/Input"> Manual</a></li>
-                              <li><a runat="server" href="~/Import"> Import</a></li>
+                              <li><a runat="server" href="~/Input"> Add word</a></li>
+                              <li><a runat="server" href="~/Import"> Import from CSV</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Review<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                              <li><a runat="server" href="~/WordPractice"> Words</a></li>
-                              <li><a runat="server" href="~/DefinitionPractice"> Definitions</a></li>
+                              <li><a runat="server" href="~/WordPractice">Given a word</a></li>
+                              <li><a runat="server" href="~/DefinitionPractice">Given a definition</a></li>
                             </ul>
                         </li>
-                        <li><a runat="server" href="~/Words"> Words</a></li>
+                        <li><a runat="server" href="~/Words"> My Word List</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                       <li><a runat="server" href="~/Profile"><span class="glyphicon glyphicon-user"></span> <%:Session["Username"]%></a></li>

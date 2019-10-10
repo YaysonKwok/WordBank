@@ -29,5 +29,10 @@ namespace WordBank
                 connection.Close();
             }
         }
+
+        protected void Page_Unload(object sender, EventArgs e)
+        {
+            connection.Close();
+        }
     }
 }

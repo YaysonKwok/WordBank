@@ -12,6 +12,7 @@
 Web.config
 Settings.settings
 Settings.Designer.cs
+Startup.Auth.cs
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)

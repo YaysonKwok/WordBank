@@ -44,7 +44,7 @@ namespace WordBank
             {
                 Responselbl.Attributes.Add("class", "alert alert-success");
                 Responselbl.Text = "Correct! Here's a new definition";
-                using (SqlCommand CorrectAnswerUpdate = new SqlCommand("UPDATE WordBank SET CorrectDefinition = CorrectDefinition + 1 WHERE Word = @Word", connection))
+                using (SqlCommand CorrectAnswerUpdate = new SqlCommand("UPDATE WordBank SET CorrectDefinition = CorrectDefinition + 1, LastDefPractice = GETDATE() WHERE Word = @Word", connection))
                 {
                     CorrectAnswerUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
                     CorrectAnswerUpdate.ExecuteNonQuery();
@@ -58,7 +58,7 @@ namespace WordBank
                 Responselbl.Attributes.Add("class", "alert alert-danger");
                 Responselbl.Text = "Incorrect, Try Again";
                 AnswerList.Items[AnswerList.SelectedIndex].Enabled = false;
-                using (SqlCommand AttemptUpdate = new SqlCommand("UPDATE WordBank SET DefinitionAttempts = DefinitionAttempts + 1 WHERE Word = @Word", connection))
+                using (SqlCommand AttemptUpdate = new SqlCommand("UPDATE WordBank SET DefinitionAttempts = DefinitionAttempts + 1, LastDefPractice = GETDATE() WHERE Word = @Word", connection))
                 {
                     AttemptUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
                     AttemptUpdate.ExecuteNonQuery();
@@ -72,7 +72,7 @@ namespace WordBank
             var numbers = Enumerable.Range(1, 4).OrderBy(i => ran.Next()).ToList();
             List<ListItem> Answers = new List<ListItem>();
 
-            using(SqlCommand PracticeDef = new SqlCommand("SELECT TOP 4 Word, Definition, Sentence1, (CorrectDefinition - DefinitionAttempts) AS Difference  FROM WordBank WHERE UserID = @UsernameID ORDER BY Difference", connection))
+            using(SqlCommand PracticeDef = new SqlCommand("SELECT TOP 4 Word, Definition, Sentence1, (CorrectDefinition - DefinitionAttempts) AS Difference, LastDefPractice FROM WordBank WHERE UserID = @UsernameID ORDER BY LastDefPractice, Difference", connection))
             {
                 PracticeDef.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
 

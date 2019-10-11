@@ -24,6 +24,9 @@
 
     <div class="mb-3">
         <br />
+        <asp:CheckBox ID="InformalCheckBox" runat="server" Text="Informal" />
+        <br />
+        <br />
         <asp:Button ID="SubmitBtn" runat="server" Text="Submit" CssClass="btn btn-primary btn-lg btn-block" OnClick="SubmitBtn_Click" />
     </div>
     <br />

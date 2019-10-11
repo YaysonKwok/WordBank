@@ -7,11 +7,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WordBank
-{
+namespace WordBank {
 
 
-    public partial class _Default
-    {
-    }
+	public partial class _Default {
+	}
 }

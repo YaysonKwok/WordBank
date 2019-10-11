@@ -7,36 +7,36 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WordBank {
+namespace WordBank.Account {
     
     
-    public partial class Login {
+    public partial class VerifyPhoneNumber {
         
         /// <summary>
-        /// UsernameInput control.
+        /// ErrorMessage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox UsernameInput;
+        protected global::System.Web.UI.WebControls.Literal ErrorMessage;
         
         /// <summary>
-        /// SignInBtn control.
+        /// PhoneNumber control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button SignInBtn;
+        protected global::System.Web.UI.WebControls.HiddenField PhoneNumber;
         
         /// <summary>
-        /// Loginlbl control.
+        /// Code control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Loginlbl;
+        protected global::System.Web.UI.WebControls.TextBox Code;
     }
 }

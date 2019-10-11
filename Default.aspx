@@ -5,32 +5,22 @@
     <div class="jumbotron">
         <h1>Word Bank</h1>
         <p class="lead">Word Bank is a free online website dedicated to improving your vocabulary!</p>
-        <p><a href="~/Input" class="btn btn-primary btn-lg">Try it out here&raquo;</a></p>
     </div>
 
     <div class="row">
-        <div class="col-md-4">
-            <h2>Getting started</h2>
+        <div class="col-md-8">
+            <h2>Want to test out your knowledge of English vocabulary?</h2>
             <p>
-                Try it out here!
+                Try out a quiz here!
             </p>
             <p>
                 <a class="btn btn-default" href="~/Input">Learn more &raquo;</a>
             </p>
         </div>
         <div class="col-md-4">
-            <h2>Future Info here </h2>
+            <h2>Interested but not sold?</h2>
             <p>
-                Test
-            </p>
-            <p>
-                <a class="btn btn-default" href="~/Input">Learn more &raquo;</a>
-            </p>
-        </div>
-        <div class="col-md-4">
-            <h2>Test</h2>
-            <p>
-                Test3
+                How about a test run of the site?
             </p>
             <p>
                 <a class="btn btn-default" href="~/Input">Learn more &raquo;</a>

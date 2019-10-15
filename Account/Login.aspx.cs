@@ -14,6 +14,9 @@ namespace WordBank.Account {
 		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
 
 		protected void Page_Load(object sender, EventArgs e) {
+			Session["EditRedirect"] = false;
+			Session["ReSort"] = true;
+			Session["ReSortCounter"] = 0;
 			RegisterHyperLink.NavigateUrl = "Register";
 			// Enable this once you have account confirmation enabled for password reset functionality
 			//ForgotPasswordHyperLink.NavigateUrl = "Forgot";
@@ -26,18 +29,24 @@ namespace WordBank.Account {
 
 		protected void LogIn(object sender, EventArgs e) {
 			connection.Open();
-			using (SqlCommand ExistingUsername = new SqlCommand("SELECT Id FROM Username WHERE Username = @Username", connection)) {
-				ExistingUsername.Parameters.AddWithValue("@Username", Email.Text);
-				SqlDataReader dr = ExistingUsername.ExecuteReader();
-				dr.Read();
-				Session["UsernameID"] = dr.GetValue(0);
-				Session["Username"] = Email.Text;
-				Session["InputRedirect"] = false;
-				connection.Close();
+			if (Email.Text != null) {
+				using (SqlCommand ExistingUsername = new SqlCommand("SELECT Id FROM Username WHERE Username = @Username", connection)) {
+					ExistingUsername.Parameters.AddWithValue("@Username", Email.Text);
+					SqlDataReader dr = ExistingUsername.ExecuteReader();
+					dr.Read();
+					Session["UsernameID"] = dr.GetValue(0);
+					Session["Username"] = Email.Text;
+					Session["InputRedirect"] = false;
+					connection.Close();
 
-				Label1.Text = "You have logged in!";
+					Label1.Text = "You have logged in!";
+
+				}
+			}
+			else {
 
 			}
+
 			/*
             if (IsValid)
             {

@@ -13,11 +13,18 @@ namespace WordBank {
 		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
 		private const string ASCENDING = " ASC";
 		private const string DESCENDING = " DESC";
+		
 
 		protected void Page_Load(object sender, EventArgs e) {
 			if (Session["UsernameID"] == null) {
 				Response.Redirect("~/Account/Login.aspx");
 			}
+
+			if ((bool)Session["EditRedirect"]) {
+				Label1.Attributes.Add("class", "alert alert-success");
+				Label1.Text = "Successfully Updated";
+			}
+
 			if (!IsPostBack) {
 				GenerateTable();
 			}
@@ -38,21 +45,9 @@ namespace WordBank {
 
 		protected void GridView_RowEditing(object sender, GridViewEditEventArgs e) {
 			GridView.EditIndex = e.NewEditIndex;
-			GenerateTable();
-		}
-
-
-
-		protected void GenerateTable() {
-			connection.Open();
-			using (SqlCommand Data = new SqlCommand("SELECT ID, Word, Definition, Sentence1, CorrectWord, WordAttempts, CorrectDefinition, DefinitionAttempts, Informal, DateCreated FROM WordBank WHERE UserID = @UsernameID", connection)) {
-				Data.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
-				SqlDataReader reader = Data.ExecuteReader();
-				GridView.DataSource = reader;
-				GridView.DataBind();
-				GridView.HeaderRow.TableSection = TableRowSection.TableHeader;
-			}
-			connection.Close();
+			Session["WordID"] = Convert.ToInt32(GridView.DataKeys[e.NewEditIndex].Value.ToString());
+			Label1.Text = Session["WordID"].ToString();
+			Response.Redirect("EditWord.aspx");
 		}
 
 		protected void GridView_RowUpdating(object sender, GridViewUpdateEventArgs e) {
@@ -109,7 +104,6 @@ namespace WordBank {
 			connection.Close();
 		}
 
-
 		public SortDirection GridViewSortDirection {
 			get {
 				if (ViewState["sortDirection"] == null)
@@ -118,6 +112,21 @@ namespace WordBank {
 				return (SortDirection)ViewState["sortDirection"];
 			}
 			set { ViewState["sortDirection"] = value; }
+		}
+		protected void GenerateTable() {
+			connection.Open();
+			using (SqlCommand Data = new SqlCommand("SELECT ID, Word, Definition, Sentence1, CorrectWord, WordAttempts, CorrectDefinition, DefinitionAttempts, Informal, DateCreated FROM WordBank WHERE UserID = @UsernameID", connection)) {
+				Data.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
+				SqlDataReader reader = Data.ExecuteReader();
+				GridView.DataSource = reader;
+				GridView.DataBind();
+				GridView.HeaderRow.TableSection = TableRowSection.TableHeader;
+			}
+			connection.Close();
+		}
+
+		protected void Page_Unload(object sender, EventArgs e) {
+			Session["EditRedirect"] = false;
 		}
 	}
 }

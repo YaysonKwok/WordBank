@@ -10,16 +10,16 @@
 namespace WordBank {
     
     
-    public partial class WordPractice {
+    public partial class EditWord {
         
         /// <summary>
-        /// Label1 control.
+        /// WordTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label1;
+        protected global::System.Web.UI.WebControls.Label WordTitle;
         
         /// <summary>
         /// Wordlbl control.
@@ -31,31 +31,58 @@ namespace WordBank {
         protected global::System.Web.UI.WebControls.Label Wordlbl;
         
         /// <summary>
-        /// HintBtn control.
+        /// WordInput control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button HintBtn;
+        protected global::System.Web.UI.WebControls.TextBox WordInput;
         
         /// <summary>
-        /// HintLbl control.
+        /// Definitionlbl control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label HintLbl;
+        protected global::System.Web.UI.WebControls.Label Definitionlbl;
         
         /// <summary>
-        /// AnswerList control.
+        /// DefinitionInput control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButtonList AnswerList;
+        protected global::System.Web.UI.WebControls.TextBox DefinitionInput;
+        
+        /// <summary>
+        /// Sentence1lbl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Sentence1lbl;
+        
+        /// <summary>
+        /// Sentence1Input control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox Sentence1Input;
+        
+        /// <summary>
+        /// InformalCheckBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox InformalCheckBox;
         
         /// <summary>
         /// SubmitBtn control.
@@ -67,12 +94,21 @@ namespace WordBank {
         protected global::System.Web.UI.WebControls.Button SubmitBtn;
         
         /// <summary>
-        /// Responselbl control.
+        /// CancelBtn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Responselbl;
+        protected global::System.Web.UI.WebControls.Button CancelBtn;
+        
+        /// <summary>
+        /// SubmitResponse control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label SubmitResponse;
     }
 }

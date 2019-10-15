@@ -5,7 +5,12 @@
     <p>
         Hello <%:Session["Username"]%>, here are your personal word stats.
     </p>
-    <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
+    <br />
+    <div style="margin-left: auto; margin-right: auto; text-align: center;"><asp:Label ID="Label1" runat="server"></asp:Label></div>
+    
+
+    <br />
+
     <asp:GridView ID="GridView"
         runat="server"
         DataKeyNames="ID"
@@ -20,27 +25,35 @@
         <Columns>
             <asp:CommandField ShowEditButton="true"
                 EditText="Edit"
-                CancelText="Discard"
-                UpdateText="Revise"
                 HeaderText="Edit" />
             <asp:BoundField DataField="Word"
                 HeaderText="Word"
                 SortExpression="Word" />
             <asp:BoundField DataField="Definition"
                 HeaderText="Definition" />
+            <asp:BoundField DataField="Sentence1"
+                HeaderText="Sentence" />
             <asp:BoundField DataField="CorrectWord"
-                HeaderText="Correct Word Count" SortExpression="CorrectWord" />
+                HeaderText="Corr Word Count" SortExpression="CorrectWord" ReadOnly="true" />
             <asp:BoundField DataField="WordAttempts"
-                HeaderText="Incorrect Word Count" SortExpression="WordAttempts" />
+                HeaderText="Incorr Word Count" SortExpression="WordAttempts" ReadOnly="true" />
             <asp:BoundField DataField="CorrectDefinition"
-                HeaderText="Correct Definition Count" SortExpression="CorrectDefinition" />
+                HeaderText="Corr Def Count" SortExpression="CorrectDefinition" ReadOnly="true" />
             <asp:BoundField DataField="DefinitionAttempts"
-                HeaderText="Incorrect Definition Count" SortExpression="DefinitionAttempts" />
-            <asp:BoundField DataField="Informal"
-                HeaderText="Informal" SortExpression="Informal" />
+                HeaderText="Incorr Def Count" SortExpression="DefinitionAttempts" ReadOnly="true" />
+            <asp:TemplateField HeaderText="Informal" SortExpression="Informal" >
+                <ItemTemplate>
+                    <asp:CheckBox ID="chkbox1" runat="server" Checked='<%# Eval("Informal") %>' onclick="return false;" />
+                </ItemTemplate>
+            </asp:TemplateField>
             <asp:BoundField DataField="DateCreated"
-                HeaderText="Date Created" SortExpression="DateCreated" />
-            <asp:CommandField ShowDeleteButton="True" HeaderText="Delete" />
+                HeaderText="Date Created" SortExpression="DateCreated" ReadOnly="true" />
+            <asp:TemplateField  HeaderText="Delete">
+                <ItemTemplate>
+                    <asp:Button ID="deletebtn" runat="server" CommandName="Delete"
+                        Text="Delete" OnClientClick="return confirm('Are you sure?');" />
+                </ItemTemplate>
+            </asp:TemplateField>
         </Columns>
     </asp:GridView>
 </asp:Content>

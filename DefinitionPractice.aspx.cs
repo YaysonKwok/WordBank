@@ -17,7 +17,7 @@ namespace WordBank
             connection.Open();
             if (Session["UsernameID"] == null)
             {
-                Response.Redirect("Login.aspx");
+                Response.Redirect("/Account/Login.aspx");
             }
 
             CheckWordTotal();

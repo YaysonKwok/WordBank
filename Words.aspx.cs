@@ -26,8 +26,21 @@ namespace WordBank {
 			}
 
 			if (!IsPostBack) {
+				CheckWordTotal();
 				GenerateTable();
 			}
+		}
+		private void CheckWordTotal() {
+			connection.Open();
+			using (SqlCommand WordCheck = new SqlCommand("SELECT COUNT(*) FROM WordBank WHERE UserID = @UsernameID", connection)) {
+				WordCheck.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
+				int WordAmount = (int)WordCheck.ExecuteScalar();
+				if (WordAmount < 4) {
+					Session["InputRedirect"] = true;
+					Response.Redirect("Input.aspx");
+				}
+			}
+			connection.Close();
 		}
 
 		protected void GridView_RowDeleting(object sender, GridViewDeleteEventArgs e) {
@@ -63,9 +76,10 @@ namespace WordBank {
 				Update.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
 				Update.Parameters.AddWithValue("@ID", WordID);
 				Update.ExecuteNonQuery();
-				connection.Close();
+				;
 				GenerateTable();
 			}
+			connection.Close();
 		}
 		protected void GridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e) {
 			GridView.EditIndex = -1;
@@ -127,6 +141,7 @@ namespace WordBank {
 
 		protected void Page_Unload(object sender, EventArgs e) {
 			Session["EditRedirect"] = false;
+			connection.Close();
 		}
 	}
 }

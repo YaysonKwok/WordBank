@@ -1,36 +1,44 @@
 ﻿using System;
-using System.Linq;
-using System.Web;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Security.Cryptography;
 using System.Web.UI;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Owin;
-using WordBank.Models;
 
 namespace WordBank.Account
 {
     public partial class Register : Page
     {
-        protected void CreateUser_Click(object sender, EventArgs e)
+		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
+		protected void CreateUser_Click(object sender, EventArgs e)
         {
-            var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            var signInManager = Context.GetOwinContext().Get<ApplicationSignInManager>();
-            var user = new ApplicationUser() { UserName = Email.Text, Email = Email.Text };
-            IdentityResult result = manager.Create(user, Password.Text);
-            if (result.Succeeded)
-            {
-                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                //string code = manager.GenerateEmailConfirmationToken(user.Id);
-                //string callbackUrl = IdentityHelper.GetUserConfirmationRedirectUrl(code, user.Id, Request);
-                //manager.SendEmail(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>.");
+			connection.Open();
 
-                signInManager.SignIn( user, isPersistent: false, rememberBrowser: false);
-                IdentityHelper.RedirectToReturnUrl(Request.QueryString["ReturnUrl"], Response);
-            }
-            else 
-            {
-                ErrorMessage.Text = result.Errors.FirstOrDefault();
-            }
-        }
-    }
+			if (Username.Text != null && Password.Text != null) {
+				var sha256 = new SHA256Managed();
+				var bytes = System.Text.UTF8Encoding.UTF8.GetBytes(Password.Text);
+				var hash = sha256.ComputeHash(bytes);
+				string PasswordHash = Convert.ToBase64String(hash);
+				Label1.Text = PasswordHash;
+				using (SqlCommand UsernameCheck = new SqlCommand("IF NOT EXISTS(SELECT 1 FROM Login WHERE Username = @Username) INSERT INTO Login (Username,Password) VALUES (@Username, @Password)", connection)) {
+					UsernameCheck.Parameters.AddWithValue("@Username", Username.Text);
+					UsernameCheck.Parameters.AddWithValue("@Password", PasswordHash);
+					UsernameCheck.ExecuteNonQuery();
+					
+				}
+
+				using (SqlCommand ExistingUsername = new SqlCommand("SELECT Id FROM Login WHERE Username = @Username", connection)) {
+					ExistingUsername.Parameters.AddWithValue("@Username", Username.Text);
+					SqlDataReader dr = ExistingUsername.ExecuteReader();
+					dr.Read();
+					Session["UsernameID"] = dr.GetValue(0);
+					Session["Username"] = Username.Text;
+					Session["InputRedirect"] = false;
+					connection.Close();
+
+				}
+
+			}
+
+		}
+	}
 }

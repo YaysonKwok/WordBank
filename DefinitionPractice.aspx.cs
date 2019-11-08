@@ -19,9 +19,7 @@ namespace WordBank
             {
                 Response.Redirect("/Account/Login.aspx");
             }
-
             CheckWordTotal();
-
             if (!IsPostBack)
             {
                 Clear();

@@ -30,12 +30,13 @@ namespace WordBank {
 				GenerateTable();
 			}
 		}
+
 		private void CheckWordTotal() {
 			connection.Open();
 			using (SqlCommand WordCheck = new SqlCommand("SELECT COUNT(*) FROM WordBank WHERE UserID = @UsernameID", connection)) {
 				WordCheck.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
 				int WordAmount = (int)WordCheck.ExecuteScalar();
-				if (WordAmount < 4) {
+				if (WordAmount < 1) {
 					Session["InputRedirect"] = true;
 					Response.Redirect("Input.aspx");
 				}

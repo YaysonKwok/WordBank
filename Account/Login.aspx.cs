@@ -10,12 +10,14 @@ namespace WordBank.Account {
 		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
 
 		protected void Page_Load(object sender, EventArgs e) {
+			if (Session["UsernameID"] != null) {
+				Response.Redirect("~/Words.aspx");
+			}
 			connection.Open();
 			Session["EditRedirect"] = false;
 			Session["ReSort"] = true;
 			Session["ReSortCounter"] = 0;
 			RegisterHyperLink.NavigateUrl = "Register";
-			OpenAuthLogin.ReturnUrl = Request.QueryString["ReturnUrl"];
 			var returnUrl = HttpUtility.UrlEncode(Request.QueryString["ReturnUrl"]);
 			if (!String.IsNullOrEmpty(returnUrl)) {
 				RegisterHyperLink.NavigateUrl = "?ReturnUrl=" + returnUrl;
@@ -28,24 +30,24 @@ namespace WordBank.Account {
 			var hash = sha256.ComputeHash(bytes);
 			string PasswordHash = Convert.ToBase64String(hash);
 
-			Label1.Text = PasswordHash;
-			if (Email.Text != null ) {
+			//LoginMessage.Text = PasswordHash;
+			if (Username.Text != null ) {
 				using (SqlCommand ExistingUsername = new SqlCommand("SELECT Id FROM Login WHERE Username = @Username AND Password = @Password", connection)) {
-					ExistingUsername.Parameters.AddWithValue("@Username", Email.Text);
+					ExistingUsername.Parameters.AddWithValue("@Username", Username.Text);
 					ExistingUsername.Parameters.AddWithValue("@Password", PasswordHash);
 					SqlDataReader dr = ExistingUsername.ExecuteReader();
 
 					if (dr.HasRows) {
 						dr.Read();
 						Session["UsernameID"] = dr.GetValue(0);
-						Session["Username"] = Email.Text;
+						Session["Username"] = Username.Text;
 						Session["InputRedirect"] = false;
-						
-						Label1.Text = "You have logged in!";
+
+						LoginMessage.Text = "You have logged in!";
 						connection.Close();
 					}
 					else {
-						Label1.Text = "Incorrect Username or Password";
+						ErrorMessage.Text = "Incorrect Username or Password";
 						connection.Close();
 					}
 

@@ -13,9 +13,30 @@
             <p>
                 Try out a quiz here!
             </p>
-            <p>
-                <a class="btn btn-default" href="~/Input">Learn more &raquo;</a>
-            </p>
+    Word:
+    <asp:Label ID="Wordlbl" runat="server" Text="Label" Font-Bold="true"></asp:Label>
+    <br />
+    <br />
+    <asp:Button ID="HintBtn" runat="server" OnClick="HintBtn_Click" Text="Hint" />
+    <br />
+    <asp:Label ID="HintLbl" runat="server" Visible="False"></asp:Label>
+    <br />
+    <br />
+    <asp:RadioButtonList ID="AnswerList" runat="server" CssClass="form-check-input">
+    </asp:RadioButtonList>
+
+    <br />
+
+    <asp:Button ID="SubmitBtn" runat="server" Text="Submit Answer" OnClick="SubmitBtn_Click"  CssClass="btn btn-primary btn-sm"/>
+
+
+    <br />
+
+
+    <br />
+
+
+    <asp:Label ID="Responselbl" runat="server"></asp:Label>
         </div>
         <div class="col-md-4">
             <h2>Interested but not sold?</h2>
@@ -23,7 +44,7 @@
                 How about a test run of the site?
             </p>
             <p>
-                <a class="btn btn-default" href="~/Input">Learn more &raquo;</a>
+                <asp:Button runat="server" OnClick="Guest_Click" Text="Learn More" CssClass="btn btn-default" />
             </p>
         </div>
     </div>

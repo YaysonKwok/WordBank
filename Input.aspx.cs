@@ -19,7 +19,7 @@ namespace WordBank
             }
 
             if ((bool)Session["InputRedirect"]){
-                Redirectlbl.Text = "You have been redirected since you have less than 4 words";
+                Redirectlbl.Text = "You have been redirected";
                 Redirectlbl.Visible = true;
             }
         }

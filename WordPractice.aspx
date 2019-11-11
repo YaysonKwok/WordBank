@@ -1,7 +1,6 @@
 ﻿<%@ Page Title="Word Practice" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="WordPractice.aspx.cs" Inherits="WordBank.WordPractice" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <asp:Label ID="Label1" runat="server" Text="Label"><%:Session["ReSortCounter"]%></asp:Label>
     <br />
     Please select the correct definition:
     <br />

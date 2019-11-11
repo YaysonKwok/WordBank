@@ -2,14 +2,17 @@
 
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
     <h2><%: Title %>.</h2>
-    <p class="text-danger">
-        <asp:Literal runat="server" ID="ErrorMessage" />
-    </p>
 
     <div class="form-horizontal">
         <h4>Create a new account</h4>
         <hr />
-        <asp:ValidationSummary runat="server" CssClass="text-danger" />
+
+    <p class="text-danger">
+        <asp:Literal runat="server" ID="ErrorMessage" />
+    </p>
+        <p class="text-success">
+        <asp:Literal runat="server" ID="SuccessMessage" />
+    </p>
         <div class="form-group">
             <asp:Label runat="server" AssociatedControlID="Username" CssClass="col-md-2 control-label">Username</asp:Label>
             <div class="col-md-10">
@@ -31,5 +34,4 @@
             </div>
         </div>
     </div>
-    <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
 </asp:Content>

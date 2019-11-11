@@ -11,15 +11,15 @@
                 <div class="form-horizontal">
                     <h4>Use a local account to log in.</h4>
                     <hr />
-                    <asp:PlaceHolder runat="server" ID="ErrorMessage" Visible="false">
+
                         <p class="text-danger">
-                            <asp:Literal runat="server" ID="FailureText" />
-                        </p>
-                    </asp:PlaceHolder>
+        <asp:Literal runat="server" ID="ErrorMessage" />
+    </p>
                     <div class="form-group">
-                        <asp:Label runat="server" AssociatedControlID="Email" CssClass="col-md-2 control-label">Username</asp:Label>
+                        <asp:Label runat="server" AssociatedControlID="Username" CssClass="col-md-2 control-label">Username</asp:Label>
                         <div class="col-md-10">
-                            <asp:TextBox runat="server" ID="Email" CssClass="form-control" />
+                            <asp:TextBox runat="server" ID="Username" CssClass="form-control" />
+                            <asp:RequiredFieldValidator runat="server" id="reqName" controltovalidate="Username"  CssClass="text-danger" ErrorMessage="The username field is required." />
                         </div>
                     </div>
                             <div class="form-group">
@@ -39,16 +39,10 @@
                 <p>
                     <asp:HyperLink runat="server" ID="RegisterHyperLink" ViewStateMode="Disabled">Register as a new user</asp:HyperLink>
                 </p>
-                <p>
-                    <asp:Label ID="Label1" runat="server"></asp:Label>
-                </p>
             </section>
         </div>
-        <asp:Label ID="Label2" runat="server" Text="Label"></asp:Label>
-        <div class="col-md-4">
-            <section id="socialLoginForm">
-                <uc:OpenAuthProviders runat="server" ID="OpenAuthLogin" />
-            </section>
-        </div>
+                                <p class="text-success">
+        <asp:Literal runat="server" ID="LoginMessage" />
+    </p>
     </div>
 </asp:Content>

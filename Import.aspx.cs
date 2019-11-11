@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.VisualBasic.FileIO;
 
@@ -13,9 +9,10 @@ namespace WordBank {
 	public partial class Import : System.Web.UI.Page {
 		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
 		static string UserID = "UserID";
-		static string Word = "Word";
-		static string Definition = "Definition";
-		static string Sentence1 = "Sentence1";
+		DataColumn Word = new DataColumn("Word");
+		DataColumn Definition = new DataColumn("Definition");
+		DataColumn Sentence1 = new DataColumn("Sentence1");
+		DataColumn Informal = new DataColumn("Informal");
 
 		protected void Page_Load(object sender, EventArgs e) {
 			if (Session["UsernameID"] == null) {
@@ -35,13 +32,17 @@ namespace WordBank {
 				DataTable.Columns.Add(Word);
 				DataTable.Columns.Add(Definition);
 				DataTable.Columns.Add(Sentence1);
+				Informal.DataType = System.Type.GetType("System.Boolean");
+				DataTable.Columns.Add(Informal);
 
 				while (!parser.EndOfData) {
 					string[] fieldData = parser.ReadFields();
 					DataRow newRow = DataTable.NewRow();
+
 					newRow[Word] = fieldData[0];
 					newRow[Definition] = fieldData[1];
 					newRow[Sentence1] = fieldData[2];
+					newRow[Informal] = fieldData[3];
 					DataTable.Rows.Add(newRow);
 				}
 
@@ -63,16 +64,19 @@ namespace WordBank {
 						SqlBulkCopyColumnMapping Sentence1 = new SqlBulkCopyColumnMapping("Sentence1", "Sentence1");
 						bulkCopy.ColumnMappings.Add(Sentence1);
 
+						SqlBulkCopyColumnMapping Informal = new SqlBulkCopyColumnMapping("Informal", "Informal");
+						bulkCopy.ColumnMappings.Add(Informal);
 						bulkCopy.WriteToServer(DataTable);
+						UploadMessage.Text = "Upload Completed!";
 					}
 					catch (Exception ex) {
-						Console.WriteLine(ex.Message);
+						UploadFailed.Text = ex.Message;
 					}
 
 				}
 			}
 			else {
-				Label1.Text = "You need to select a file.";
+				UploadFailed.Text = "You need to select a file!";
 			}
 		}
 		protected void Page_Unload(object sender, EventArgs e) {

@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -66,7 +67,8 @@ namespace WordBank
 
         protected void GenerateNewQuestion()
         {
-            Random ran = new Random();
+			HintLbl.Visible = false;
+			Random ran = new Random();
             var numbers = Enumerable.Range(1, 4).OrderBy(i => ran.Next()).ToList();
             List<ListItem> Answers = new List<ListItem>();
 
@@ -79,7 +81,18 @@ namespace WordBank
                     DataReader.Read();
                     Answers.Add(new ListItem(DataReader.GetString(0)));
                     Definitionlbl.Text = DataReader.GetString(1);
-                    Session["Word"] = DataReader.GetString(0);
+					string input = DataReader.GetString(2);
+					string[] sKeywords = DataReader.GetString(0).Split(' ');
+					foreach (string sKeyword in sKeywords) {
+						try {
+							input = Regex.Replace(input, sKeyword, string.Format("______"), RegexOptions.IgnoreCase);
+						}
+						catch {
+							//
+						}
+					}
+					HintLbl.Text = input;
+					Session["Word"] = DataReader.GetString(0);
                     Session["Answer"] = DataReader.GetString(0);
                     DataReader.Read();
                     Answers.Add(new ListItem(DataReader.GetString(0)));
@@ -111,7 +124,12 @@ namespace WordBank
                 }
             }
         }
-        protected void Clear()
+
+		protected void HintBtn_Click(object sender, EventArgs e) {
+			HintLbl.Visible = true;
+		}
+
+		protected void Clear()
         {
             AnswerList.Items.Clear();
         }

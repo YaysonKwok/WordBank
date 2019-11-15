@@ -11,7 +11,7 @@
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/bundles/modernizr") %>
     </asp:PlaceHolder>
-    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <webopt:BundleReference runat="server" Path="~/Content/css" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
 </head>
@@ -49,39 +49,37 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a runat="server" href="~/"> Home</a></li>
+                        <li><a runat="server" href="~/">Home</a></li>
                         <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Data Entry<span class="caret"></span></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Data Entry<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                              <li><a runat="server" href="~/Input"> Add word</a></li>
-                              <li><a runat="server" href="~/Import"> Import from CSV</a></li>
+                                <li><a runat="server" href="~/Input">Add word</a></li>
+                                <li><a runat="server" href="~/Import">Import from CSV</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Review<span class="caret"></span></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Review<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                              <li><a runat="server" href="~/WordPractice">Given a word</a></li>
-                              <li><a runat="server" href="~/DefinitionPractice">Given a definition</a></li>
+                                <li><a runat="server" href="~/WordPractice">Given a word</a></li>
+                                <li><a runat="server" href="~/DefinitionPractice">Given a definition</a></li>
                             </ul>
                         </li>
-                        <li><a runat="server" href="~/Words"> My Word List</a></li>
+                        <li><a runat="server" href="~/Words">My Word List</a></li>
                     </ul>
                     <asp:LoginView runat="server" ViewStateMode="Disabled">
                         <AnonymousTemplate>
                             <ul class="nav navbar-nav navbar-right">
-                                <li><a runat="server" href="~/Words.aspx"><%:Session["Username"]%></a></li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><%:Session["Username"]%><span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a runat="server" href="~/Account/Settings">Settings</a></li>
+                                        <li><a runat="server" href="~/Account/Logout">Logout</a></li>
+                                    </ul>
+                                </li>
                                 <li><a runat="server" href="~/Account/Login">Log in</a></li>
-                                <li><a runat="server" href="~/Account/Logout">Logout</a></li></li>
-                            </ul>
-                        </AnonymousTemplate>
-                        <LoggedInTemplate>
-                            <ul class="nav navbar-nav navbar-right">
-                                <li><a runat="server" href="~/Account/Manage" title="Manage your account">Hello, <%: Context.User.Identity.GetUserName()  %> !</a></li>
-                                <li>
-                                    <asp:LoginStatus runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" OnLoggingOut="Unnamed_LoggingOut" />
                                 </li>
                             </ul>
-                        </LoggedInTemplate>
+                        </AnonymousTemplate>
                     </asp:LoginView>
                 </div>
             </div>

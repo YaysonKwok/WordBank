@@ -9,7 +9,6 @@ namespace WordBank {
 		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
 		private const string ASCENDING = " ASC";
 		private const string DESCENDING = " DESC";
-		
 
 		protected void Page_Load(object sender, EventArgs e) {
 			if (Session["UsernameID"] == null) {
@@ -18,7 +17,7 @@ namespace WordBank {
 
 			if ((bool)Session["EditRedirect"]) {
 				Label1.Attributes.Add("class", "alert alert-success");
-				Label1.Text = "Successfully Updated";
+				Label1.Text = "Entry Successfully Updated";
 			}
 
 			if ((bool)Session["LoginRedirect"]) {
@@ -148,7 +147,7 @@ namespace WordBank {
 		}
 
 		protected void ExportCSVBtn_Click(object sender, EventArgs e) {
-				using (SqlCommand Export = new SqlCommand("SELECT Word, Informal, Definition, Sentence1 FROM WordBank WHERE UserID = @UsernameID", connection)) {
+				using (SqlCommand Export = new SqlCommand("SELECT Word, Definition, Sentence1,Informal FROM WordBank WHERE UserID = @UsernameID", connection)) {
 				Export.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
 				using (SqlDataAdapter sda = new SqlDataAdapter()) {
 						sda.SelectCommand = Export;

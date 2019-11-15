@@ -69,12 +69,13 @@ namespace WordBank
 
         protected void InsertWord()
         {
-            using (SqlCommand Insert = new SqlCommand("INSERT INTO WordBank(UserID, Word, Definition, Sentence1, Informal) VALUES(@UsernameID,@Word,@Definition,@Sentence1, @Informal)", connection))
+            using (SqlCommand Insert = new SqlCommand("INSERT INTO WordBank(UserID, Word, Definition, Sentence1, Sentence2, Informal) VALUES(@UsernameID,@Word,@Definition,@Sentence1, @Sentence2, @Informal)", connection))
             {
                 Insert.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
                 Insert.Parameters.AddWithValue("@Word", WordInput.Text);
                 Insert.Parameters.AddWithValue("@Definition", DefinitionInput.Text);
                 Insert.Parameters.AddWithValue("@Sentence1", Sentence1Input.Text);
+				Insert.Parameters.AddWithValue("@Sentence2", Sentence2Input.Text);
 				Insert.Parameters.AddWithValue("@Informal", InformalCheckBox.Checked);
                 try
                 {

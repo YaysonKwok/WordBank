@@ -27,9 +27,9 @@
         <asp:CheckBox ID="InformalCheckBox" runat="server" Text=" Informal" Checked='<%# Eval("Informal") %>'/>
         <br />
         <br />
-        <asp:Button ID="SubmitBtn" runat="server" Text="Submit" CssClass="btn btn-primary btn-sm" OnClick="EditWord_Click" />
+        <asp:Button ID="SubmitBtn" runat="server" Text="Submit" CssClass="btn btn-primary btn-sm" OnClick="EditWord_Click" UseSubmitBehavior="False"/>
 
-        <asp:Button ID="CancelBtn" runat="server" Text="Cancel" CssClass="btn btn-primary btn-sm" OnClick="Cancel_Click" />
+        <asp:Button ID="CancelBtn" runat="server" Text="Cancel" CssClass="btn btn-primary btn-sm" OnClick="Cancel_Click" UseSubmitBehavior="False"/>
     </div>
     <br />
     <asp:Label ID="SubmitResponse" runat="server"></asp:Label>

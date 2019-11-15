@@ -16,6 +16,7 @@
          ErrorMessage="Only csv files are allowed" 
          ValidationExpression="(.*\.([cC][sS][vV])$)">
     </asp:RegularExpressionValidator> 
+    <asp:CheckBox ID="TitleCheck" runat="server" />
     <br />
     <asp:GridView id="GridView" runat="server" AutoGenerateColumns="true" CssClass="table table-striped" >
     </asp:GridView>

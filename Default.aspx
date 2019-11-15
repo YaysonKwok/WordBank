@@ -3,7 +3,7 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="jumbotron container-fluid" style ="padding: 0px 20px 0px 20px;">
-        <h1 class="display-4">Word Bank</h1>
+        <h2 class="display-4">Word Bank</h2>
         <hr class="my-5">
         <p class="lead"> WordBank is a free website that helps you retain your new vocabulary. It has the following features:</p>
             <p>1. Input new words, definitions, and usage sentences.
@@ -31,14 +31,10 @@
                     <br />
                     <asp:RadioButtonList ID="AnswerList" runat="server" CssClass="form-check-input">
                     </asp:RadioButtonList>
-
                     <br />
-
                     <asp:Button ID="SubmitBtn" runat="server" Text="Submit Answer" OnClick="SubmitBtn_Click" CssClass="btn btn-primary" />
-
                     <br />
                     <br />
-
                     <asp:Label ID="Responselbl" runat="server"></asp:Label>
                 </div>
             </div>

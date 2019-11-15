@@ -19,15 +19,8 @@
     </asp:RadioButtonList>
 
     <br />
-
     <asp:Button ID="SubmitBtn" runat="server" Text="Submit Answer" OnClick="SubmitBtn_Click"  CssClass="btn btn-primary btn-sm"/>
-
-
     <br />
-
-
     <br />
-
-
     <asp:Label ID="Responselbl" runat="server"></asp:Label>
 </asp:Content>

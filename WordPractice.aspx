@@ -10,7 +10,7 @@
     <asp:Label ID="Wordlbl" runat="server" Text="Label" Font-Bold="true"></asp:Label>
     <br />
     <br />
-    <asp:Button ID="HintBtn" runat="server" OnClick="HintBtn_Click" Text="Hint" />
+    <asp:Button ID="HintBtn" runat="server" OnClick="HintBtn_Click" Text="Hint" CssClass="btn btn-primary btn-sm"/>
     <br />
     <asp:Label ID="HintLbl" runat="server" Visible="False"></asp:Label>
     <br />

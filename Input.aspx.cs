@@ -18,11 +18,18 @@ namespace WordBank
                 Response.Redirect("~/Account/Login.aspx");
             }
 
-            if ((bool)Session["InputRedirect"]){
-                Redirectlbl.Text = "You have been redirected";
-                Redirectlbl.Visible = true;
+            if ((bool)Session["RedirectFromPractice"]){
+                Redirectlbl.Text = "Please add at least 5 words before practicing";
+				Redirectlbl.Attributes.Add("class", "alert alert-danger");
+				Redirectlbl.Visible = true;
             }
-        }
+
+			if ((bool)Session["RedirectFromWordList"]) {
+				Redirectlbl.Text = "Your word list is empty, add at least 1 word here!";
+				Redirectlbl.Attributes.Add("class", "alert alert-danger");
+				Redirectlbl.Visible = true;
+			}
+		}
 
         protected void SubmitBtn_Click(object sender, EventArgs e)
         {
@@ -55,7 +62,8 @@ namespace WordBank
 
         protected void Page_Unload(object sender, EventArgs e)
         {
-            Session["InputRedirect"] = false;
+            Session["RedirectFromPractice"] = false;
+			Session["RedirectFromWordList"] = false;
             Redirectlbl.Visible = false;
         }
 
@@ -72,7 +80,7 @@ namespace WordBank
                 {
                     Insert.ExecuteNonQuery();
                     SubmitResponse.Attributes.Add("class", "alert alert-success");
-                    SubmitResponse.Text = "Success! You can add another.";
+                    SubmitResponse.Text = "Word Added! You can add another.";
                     Redirectlbl.Visible = false;
                     Clear();
                 }

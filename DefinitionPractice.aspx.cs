@@ -106,7 +106,7 @@ namespace WordBank
                 int WordAmount = (int)WordCheck.ExecuteScalar();
                 if (WordAmount < 4)
                 {
-                    Session["InputRedirect"] = true;
+                    Session["RedirectFromPractice"] = true;
                     Response.Redirect("Input.aspx");
                 }
             }

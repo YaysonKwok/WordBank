@@ -29,7 +29,7 @@ namespace WordBank {
 				WordCheck.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
 				int WordAmount = (int)WordCheck.ExecuteScalar();
 				if (WordAmount < 4) {
-					Session["InputRedirect"] = true;
+					Session["RedirectFromPractice"] = true;
 					Response.Redirect("Input.aspx");
 				}
 			}
@@ -42,8 +42,7 @@ namespace WordBank {
 				Responselbl.Attributes.Add("class", "alert alert-danger");
 				Responselbl.Text = "You must choose an answer!";
 			}
-
-			if (Session["SelectedAnswer"].ToString().Equals(Session["Answer"].ToString())) {
+			else if (Session["SelectedAnswer"].ToString().Equals(Session["Answer"].ToString())) {
 				Responselbl.Attributes.Add("class", "alert alert-success");
 				Responselbl.Text = "Correct! Here's a new word";
 				using (SqlCommand CorrectAnswerUpdate = new SqlCommand("UPDATE WordBank SET CorrectWord = CorrectWord + 1, LastWordPractice = GETDATE()  WHERE Word = @Word", connection)) {

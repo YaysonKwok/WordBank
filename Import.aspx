@@ -7,6 +7,7 @@
     <p class="text-danger">
       <asp:Literal runat="server" ID="UploadFailed" />
     </p>
+    <asp:Label ID="Label1" runat="server" Text="Expected Input Order: No title columns, Word, Definition, Sentence, Informal (TRUE or FALSE)"></asp:Label>
     <asp:FileUpload ID="Upload" runat="server" />
     <br />
     <asp:Button ID="UploadBtn" runat="server" OnClick="UploadBtn_Click" Text="Upload" />

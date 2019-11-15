@@ -27,8 +27,7 @@ namespace WordBank {
 				Responselbl.Attributes.Add("class", "alert alert-danger");
 				Responselbl.Text = "You must choose an answer!";
 			}
-
-			if (Session["SelectedAnswer"].ToString().Equals(Session["Answer"].ToString())) {
+			else if (Session["SelectedAnswer"].ToString().Equals(Session["Answer"].ToString())) {
 				Responselbl.Attributes.Add("class", "alert alert-success");
 				Responselbl.Text = "Correct! Here's a new word";
 
@@ -44,7 +43,6 @@ namespace WordBank {
 		}
 		protected void GenerateNewQuestion() {
 			connection.Open();
-			HintLbl.Visible = false;
 
 			Random ran = new Random();
 			var numbers = Enumerable.Range(1, 4).OrderBy(i => ran.Next()).ToList();
@@ -68,8 +66,6 @@ namespace WordBank {
 									//
 								}
 							}
-							HintLbl.Text = input;
-
 							Session["Word"] = DataReader.GetString(0);
 							Session["Answer"] = DataReader.GetString(1);
 							DataReader.Read();
@@ -90,10 +86,6 @@ namespace WordBank {
 		}
 		protected void Clear() {
 			AnswerList.Items.Clear();
-		}
-
-		protected void HintBtn_Click(object sender, EventArgs e) {
-			HintLbl.Visible = true;
 		}
 
 		protected void Guest_Click(object sender, EventArgs e)

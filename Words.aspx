@@ -2,13 +2,15 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
-    <p>
-        Hello <%:Session["Username"]%>, here are your personal word stats.
-    </p>
-    <br />
-    <div style="margin-left: auto; margin-right: auto; text-align: center;"><asp:Label ID="Label1" runat="server"></asp:Label></div>
-    
-
+    <div style="margin-left: auto; margin-right: auto; text-align: center;">
+        <p>
+            Hello <%:Session["Username"]%>, here are your personal word stats.
+        </p>
+        
+        <p><asp:Button Text="Export" OnClick="ExportCSVBtn_Click" runat="server" /></p>
+        <br />
+        <p><asp:Label ID="Label1" runat="server"></asp:Label></p>
+    </div>
     <br />
 
     <asp:GridView ID="GridView"
@@ -41,14 +43,14 @@
                 HeaderText="Corr Def Count" SortExpression="CorrectDefinition" ReadOnly="true" />
             <asp:BoundField DataField="DefinitionAttempts"
                 HeaderText="Incorr Def Count" SortExpression="DefinitionAttempts" ReadOnly="true" />
-            <asp:TemplateField HeaderText="Informal" SortExpression="Informal" >
+            <asp:TemplateField HeaderText="Informal" SortExpression="Informal">
                 <ItemTemplate>
                     <asp:CheckBox ID="chkbox1" runat="server" Checked='<%# Eval("Informal") %>' onclick="return false;" />
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:BoundField DataField="DateCreated"
                 HeaderText="Date Created" SortExpression="DateCreated" ReadOnly="true" />
-            <asp:TemplateField  HeaderText="Delete">
+            <asp:TemplateField HeaderText="Delete">
                 <ItemTemplate>
                     <asp:Button ID="deletebtn" runat="server" CommandName="Delete"
                         Text="Delete" OnClientClick="return confirm('Are you sure?');" />

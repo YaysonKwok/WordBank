@@ -2,6 +2,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="mb-3">
+        <br />
+        <br />
         <asp:Label ID="Redirectlbl" runat="server" Visible="False"></asp:Label>
         <br />
         <br />
@@ -27,7 +29,7 @@
         <asp:CheckBox ID="InformalCheckBox" runat="server" Text="Informal" />
         <br />
         <br />
-        <asp:Button ID="SubmitBtn" runat="server" Text="Submit" CssClass="btn btn-primary btn-sm" OnClick="SubmitBtn_Click" />
+        <asp:Button ID="SubmitBtn" runat="server" Text="Submit" CssClass="btn btn-primary btn-sm" OnClick="SubmitBtn_Click" UseSubmitBehavior="False" />
     </div>
     <br />
     <asp:Label ID="SubmitResponse" runat="server"></asp:Label>

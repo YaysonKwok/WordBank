@@ -55,9 +55,6 @@ namespace WordBank.Account
 					}
 
 				}
-
-
-
 			}
 
 		}

@@ -9,27 +9,31 @@
         <div class="col-md-8">
             <section id="loginForm">
                 <div class="form-horizontal">
-                    <h4>Use a local account to log in.</h4>
                     <hr />
 
-                        <p class="text-danger">
-        <asp:Literal runat="server" ID="ErrorMessage" />
-    </p>
+                    <p class="text-danger">
+                        <asp:Literal runat="server" ID="ErrorMessage" />
+                    </p>
+
+                    <p class="text-success">
+                        <asp:Literal runat="server" ID="LoginMessage" />
+                    </p>
+
                     <div class="form-group">
                         <asp:Label runat="server" AssociatedControlID="Username" CssClass="col-md-2 control-label">Username</asp:Label>
                         <div class="col-md-10">
                             <asp:TextBox runat="server" ID="Username" CssClass="form-control" />
-                            <asp:RequiredFieldValidator runat="server" id="reqName" controltovalidate="Username"  CssClass="text-danger" ErrorMessage="The username field is required." />
+                            <asp:RequiredFieldValidator runat="server" ID="reqName" ControlToValidate="Username" CssClass="text-danger" ErrorMessage="The username field is required." />
                         </div>
                     </div>
-                            <div class="form-group">
-            <asp:Label runat="server" AssociatedControlID="Password" CssClass="col-md-2 control-label">Password</asp:Label>
-            <div class="col-md-10">
-                <asp:TextBox runat="server" ID="Password" TextMode="Password" CssClass="form-control" />
-                <asp:RequiredFieldValidator runat="server" ControlToValidate="Password"
-                    CssClass="text-danger" ErrorMessage="The password field is required." />
-            </div>
-        </div>
+                    <div class="form-group">
+                        <asp:Label runat="server" AssociatedControlID="Password" CssClass="col-md-2 control-label">Password</asp:Label>
+                        <div class="col-md-10">
+                            <asp:TextBox runat="server" ID="Password" TextMode="Password" CssClass="form-control" />
+                            <asp:RequiredFieldValidator runat="server" ControlToValidate="Password"
+                                CssClass="text-danger" ErrorMessage="The password field is required." />
+                        </div>
+                    </div>
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
                             <asp:Button runat="server" OnClick="LogIn" Text="Log in" CssClass="btn btn-default" />
@@ -41,8 +45,6 @@
                 </p>
             </section>
         </div>
-                                <p class="text-success">
-        <asp:Literal runat="server" ID="LoginMessage" />
-    </p>
+
     </div>
 </asp:Content>

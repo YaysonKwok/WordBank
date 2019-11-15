@@ -11,10 +11,14 @@ namespace WordBank.Account {
 
 		protected void Page_Load(object sender, EventArgs e) {
 			if (Session["UsernameID"] != null) {
+				Session["LoginRedirect"] = true;
 				Response.Redirect("~/Words.aspx");
 			}
 			connection.Open();
 			Session["EditRedirect"] = false;
+			Session["LoginRedirect"] = false;
+			Session["RedirectFromPractice"] = false;
+			Session["RedirectFromWordList"] = false;
 			Session["ReSort"] = true;
 			Session["ReSortCounter"] = 0;
 			RegisterHyperLink.NavigateUrl = "Register";
@@ -32,6 +36,8 @@ namespace WordBank.Account {
 
 			//LoginMessage.Text = PasswordHash;
 			if (Username.Text != null ) {
+				LoginMessage.Text = "";
+				ErrorMessage.Text = "";
 				using (SqlCommand ExistingUsername = new SqlCommand("SELECT Id FROM Login WHERE Username = @Username AND Password = @Password", connection)) {
 					ExistingUsername.Parameters.AddWithValue("@Username", Username.Text);
 					ExistingUsername.Parameters.AddWithValue("@Password", PasswordHash);
@@ -42,7 +48,6 @@ namespace WordBank.Account {
 						Session["UsernameID"] = dr.GetValue(0);
 						Session["Username"] = Username.Text;
 						Session["InputRedirect"] = false;
-
 						LoginMessage.Text = "You have logged in!";
 						connection.Close();
 					}

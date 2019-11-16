@@ -40,6 +40,15 @@ namespace WordBank {
 		protected global::System.Web.UI.WebControls.TextBox WordInput;
 
 		/// <summary>
+		/// InformalCheckBox control.
+		/// </summary>
+		/// <remarks>
+		/// Auto-generated field.
+		/// To modify move field declaration from designer file to code-behind file.
+		/// </remarks>
+		protected global::System.Web.UI.WebControls.CheckBox InformalCheckBox;
+
+		/// <summary>
 		/// Definitionlbl control.
 		/// </summary>
 		/// <remarks>
@@ -92,15 +101,6 @@ namespace WordBank {
 		/// To modify move field declaration from designer file to code-behind file.
 		/// </remarks>
 		protected global::System.Web.UI.WebControls.TextBox Sentence2Input;
-
-		/// <summary>
-		/// InformalCheckBox control.
-		/// </summary>
-		/// <remarks>
-		/// Auto-generated field.
-		/// To modify move field declaration from designer file to code-behind file.
-		/// </remarks>
-		protected global::System.Web.UI.WebControls.CheckBox InformalCheckBox;
 
 		/// <summary>
 		/// SubmitBtn control.

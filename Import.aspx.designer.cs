@@ -67,13 +67,13 @@ namespace WordBank {
 		protected global::System.Web.UI.WebControls.RegularExpressionValidator regexValidator;
 
 		/// <summary>
-		/// TitleCheck control.
+		/// TitleCheckBox control.
 		/// </summary>
 		/// <remarks>
 		/// Auto-generated field.
 		/// To modify move field declaration from designer file to code-behind file.
 		/// </remarks>
-		protected global::System.Web.UI.WebControls.CheckBox TitleCheck;
+		protected global::System.Web.UI.WebControls.CheckBox TitleCheckBox;
 
 		/// <summary>
 		/// GridView control.

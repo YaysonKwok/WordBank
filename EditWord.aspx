@@ -6,20 +6,26 @@
     <div class="form-horizontal">
     <div class="mb-3">
         <asp:Label ID="Wordlbl" runat="server" Text="Word"></asp:Label>
-        <asp:TextBox ID="WordInput" runat="server" CssClass="form-control" required="true"></asp:TextBox>
+        <asp:TextBox ID="WordInput" runat="server" CssClass="form-control" required="true" TextMode="multiline"></asp:TextBox>
     </div>
 
     <div class="mb-3">
          <br />
         <asp:Label ID="Definitionlbl" runat="server" Text="Definition"></asp:Label>
-        <asp:TextBox ID="DefinitionInput" runat="server" CssClass="form-control" required="true"></asp:TextBox>
+        <asp:TextBox ID="DefinitionInput" runat="server" CssClass="form-control" required="true" TextMode="multiline"></asp:TextBox>
     </div>
 
 
     <div class="mb-3">
         <br />
-        <asp:Label ID="Sentence1lbl" runat="server" Text="Sentence"></asp:Label>
-        <asp:TextBox ID="Sentence1Input" runat="server" CssClass="form-control" required="true"></asp:TextBox>
+        <asp:Label ID="Sentence1lbl" runat="server" Text="Contextual Sentence"></asp:Label>
+        <asp:TextBox ID="Sentence1Input" runat="server" CssClass="form-control" required="true" TextMode="multiline"></asp:TextBox>
+    </div>
+
+    <div class="mb-3">
+        <br />
+        <asp:Label ID="Sentence2lbl" runat="server" Text="Personal Sentence"></asp:Label>
+        <asp:TextBox ID="Sentence2Input" runat="server" CssClass="form-control" required="true" TextMode="multiline"></asp:TextBox>
     </div>
 
     <div class="mb-3">

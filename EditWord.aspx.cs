@@ -22,15 +22,16 @@ namespace WordBank {
 		}
 
 		private void LoadData() {
-			using (SqlCommand LoadData = new SqlCommand("SELECT Word, Definition, Sentence1, Informal FROM WordBank WHERE ID = @WordID", connection)) {
+			using (SqlCommand LoadData = new SqlCommand("SELECT Word, Definition, Sentence1, Sentence2, Informal FROM WordBank WHERE ID = @WordID", connection)) {
 				LoadData.Parameters.AddWithValue("@WordID", Session["WordID"]);
 				connection.Open();
 				using (var reader = LoadData.ExecuteReader()) {
 					while (reader.Read()) {
 						WordInput.Text = reader.GetString(reader.GetOrdinal("Word"));
 						WordTitle.Text = reader.GetString(reader.GetOrdinal("Word"));
-						DefinitionInput.Text = reader.GetString(reader.GetOrdinal("Definition")); ;
-						Sentence1Input.Text = reader.GetString(reader.GetOrdinal("Sentence1")); ;
+						DefinitionInput.Text = reader.GetString(reader.GetOrdinal("Definition"));
+						Sentence1Input.Text = reader.GetString(reader.GetOrdinal("Sentence1"));
+						Sentence2Input.Text= reader.GetString(reader.GetOrdinal("Sentence2"));
 						if (reader.GetBoolean(reader.GetOrdinal("Informal"))){
 							InformalCheckBox.Checked = true;
 						}

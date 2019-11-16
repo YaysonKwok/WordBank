@@ -34,7 +34,9 @@
             <asp:BoundField DataField="Definition"
                 HeaderText="Definition" />
             <asp:BoundField DataField="Sentence1"
-                HeaderText="Sentence" />
+                HeaderText="Contextual Sentence" />
+            <asp:BoundField DataField="Sentence2"
+                HeaderText="Personal Sentence" />
             <asp:BoundField DataField="CorrectWord"
                 HeaderText="Corr Word Count" SortExpression="CorrectWord" ReadOnly="true" />
             <asp:BoundField DataField="WordAttempts"

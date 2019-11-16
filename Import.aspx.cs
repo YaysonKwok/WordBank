@@ -12,6 +12,7 @@ namespace WordBank {
 		DataColumn Word = new DataColumn("Word");
 		DataColumn Definition = new DataColumn("Definition");
 		DataColumn Sentence1 = new DataColumn("Sentence1");
+		string Sentence2 = "Sentence2";
 		DataColumn Informal = new DataColumn("Informal");
 
 		protected void Page_Load(object sender, EventArgs e) {
@@ -32,47 +33,69 @@ namespace WordBank {
 				DataTable.Columns.Add(Word);
 				DataTable.Columns.Add(Definition);
 				DataTable.Columns.Add(Sentence1);
+				DataTable.Columns.Add(Sentence2);
+				DataTable.Columns[Sentence2].DefaultValue = "";
 				Informal.DataType = System.Type.GetType("System.Boolean");
 				DataTable.Columns.Add(Informal);
 
-				while (!parser.EndOfData) {
-					string[] fieldData = parser.ReadFields();
-					DataRow newRow = DataTable.NewRow();
+				if (TitleCheckBox.Checked) {
+					parser.ReadLine();
+				}
+				try {
+					while (!parser.EndOfData) {
+						string[] fieldData = parser.ReadFields();
+						DataRow newRow = DataTable.NewRow();
 
-					newRow[Word] = fieldData[0];
-					newRow[Definition] = fieldData[1];
-					newRow[Sentence1] = fieldData[2];
-					newRow[Informal] = fieldData[3];
-					DataTable.Rows.Add(newRow);
+						newRow[Word] = fieldData[0];
+						newRow[Informal] = fieldData[1];
+						newRow[Definition] = fieldData[2];
+						newRow[Sentence1] = fieldData[3];
+						newRow[Sentence2] = fieldData[4];
+						DataTable.Rows.Add(newRow);
+					}
+
+					GridView.DataSource = DataTable;
+					GridView.DataBind();
+
+					using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection)) {
+						bulkCopy.DestinationTableName = "WordBank_Staging";
+						try {
+							SqlBulkCopyColumnMapping UserID = new SqlBulkCopyColumnMapping("UserID", "UserID");
+							bulkCopy.ColumnMappings.Add(UserID);
+
+							SqlBulkCopyColumnMapping Word = new SqlBulkCopyColumnMapping("Word", "Word");
+							bulkCopy.ColumnMappings.Add(Word);
+
+							SqlBulkCopyColumnMapping Informal = new SqlBulkCopyColumnMapping("Informal", "Informal");
+							bulkCopy.ColumnMappings.Add(Informal);
+
+							SqlBulkCopyColumnMapping Definition = new SqlBulkCopyColumnMapping("Definition", "Definition");
+							bulkCopy.ColumnMappings.Add(Definition);
+
+							SqlBulkCopyColumnMapping Sentence1 = new SqlBulkCopyColumnMapping("Sentence1", "Sentence1");
+							bulkCopy.ColumnMappings.Add(Sentence1);
+
+							SqlBulkCopyColumnMapping Sentence2 = new SqlBulkCopyColumnMapping("Sentence2", "Sentence2");
+							bulkCopy.ColumnMappings.Add(Sentence2);
+
+							bulkCopy.WriteToServer(DataTable);
+							UploadMessage.Text = "Upload Completed!";
+						}
+						catch (Exception ex) {
+							UploadFailed.Text = ex.Message;
+						}
+					}
+				}
+				catch (Exception ex) {
+					UploadFailed.Text = ex.Message;
 				}
 
-				GridView.DataSource = DataTable;
-				GridView.DataBind();
+				using (SqlCommand Merge = new SqlCommand("INSERT INTO WordBank(UserID, Word, Definition, Sentence1, Sentence2, Informal) SELECT UserID, Word, Definition, Sentence1, Sentence2, Informal FROM WordBank_Staging WHERE NOT EXISTS (SELECT WORD FROM WordBank WHERE WordBank.Word = WordBank_Staging.Word AND WordBank.UserID = WordBank_Staging.UserID);", connection)) {
+					Merge.ExecuteNonQuery();
+				}
 
-				using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection)) {
-					bulkCopy.DestinationTableName = "WordBank";
-					try {
-						SqlBulkCopyColumnMapping UserID = new SqlBulkCopyColumnMapping("UserID", "UserID");
-						bulkCopy.ColumnMappings.Add(UserID);
-
-						SqlBulkCopyColumnMapping Word = new SqlBulkCopyColumnMapping("Word", "Word");
-						bulkCopy.ColumnMappings.Add(Word);
-
-						SqlBulkCopyColumnMapping Definition = new SqlBulkCopyColumnMapping("Definition", "Definition");
-						bulkCopy.ColumnMappings.Add(Definition);
-
-						SqlBulkCopyColumnMapping Sentence1 = new SqlBulkCopyColumnMapping("Sentence1", "Sentence1");
-						bulkCopy.ColumnMappings.Add(Sentence1);
-
-						SqlBulkCopyColumnMapping Informal = new SqlBulkCopyColumnMapping("Informal", "Informal");
-						bulkCopy.ColumnMappings.Add(Informal);
-						bulkCopy.WriteToServer(DataTable);
-						UploadMessage.Text = "Upload Completed!";
-					}
-					catch (Exception ex) {
-						UploadFailed.Text = ex.Message;
-					}
-
+				using (SqlCommand EmptyStagingTable = new SqlCommand("DELETE FROM WordBank_Staging", connection)) {
+					EmptyStagingTable.ExecuteNonQuery();
 				}
 			}
 			else {

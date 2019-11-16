@@ -17,7 +17,7 @@
     <asp:RadioButtonList ID="AnswerList" runat="server" CssClass="form-check-input">
     </asp:RadioButtonList>
     <br />
-    <asp:Button ID="SubmitBtn" runat="server" Text="Submit Answer" OnClick="SubmitBtn_Click" CssClass="btn btn-primary btn-sm"/>
+    <asp:Button ID="SubmitBtn" runat="server" Text="Submit Answer" OnClick="SubmitBtn_Click" CssClass="btn btn-primary"/>
     <br />
     <br />
     <asp:Label ID="Responselbl" runat="server"></asp:Label>

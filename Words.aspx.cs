@@ -56,7 +56,6 @@ namespace WordBank {
 			GenerateTable();
 		}
 
-
 		protected void GridView_RowEditing(object sender, GridViewEditEventArgs e) {
 			GridView.EditIndex = e.NewEditIndex;
 			Session["WordID"] = Convert.ToInt32(GridView.DataKeys[e.NewEditIndex].Value.ToString());
@@ -130,7 +129,7 @@ namespace WordBank {
 		}
 		protected void GenerateTable() {
 			connection.Open();
-			using (SqlCommand Data = new SqlCommand("SELECT ID, Word, Definition, Sentence1, CorrectWord, WordAttempts, CorrectDefinition, DefinitionAttempts, Informal, DateCreated FROM WordBank WHERE UserID = @UsernameID", connection)) {
+			using (SqlCommand Data = new SqlCommand("SELECT ID, Word, Definition, Sentence1, Sentence2, CorrectWord, WordAttempts, CorrectDefinition, DefinitionAttempts, Informal, DateCreated FROM WordBank WHERE UserID = @UsernameID", connection)) {
 				Data.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
 				SqlDataReader reader = Data.ExecuteReader();
 				GridView.DataSource = reader;
@@ -147,7 +146,7 @@ namespace WordBank {
 		}
 
 		protected void ExportCSVBtn_Click(object sender, EventArgs e) {
-				using (SqlCommand Export = new SqlCommand("SELECT Word, Definition, Sentence1,Informal FROM WordBank WHERE UserID = @UsernameID", connection)) {
+				using (SqlCommand Export = new SqlCommand("SELECT Word,Informal, Definition, Sentence1 AS Contextual_Sentence, Sentence2 AS Personal_Sentence FROM WordBank WHERE UserID = @UsernameID", connection)) {
 				Export.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
 				using (SqlDataAdapter sda = new SqlDataAdapter()) {
 						sda.SelectCommand = Export;

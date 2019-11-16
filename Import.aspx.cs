@@ -22,6 +22,8 @@ namespace WordBank {
 		}
 
 		protected void UploadBtn_Click(object sender, EventArgs e) {
+			UploadMessage.Text = "";
+			UploadFailed.Text = "";
 			connection.Open();
 			DataTable DataTable = new DataTable();
 			if (IsPostBack && Upload.HasFile) {
@@ -87,7 +89,7 @@ namespace WordBank {
 					}
 				}
 				catch (Exception ex) {
-					UploadFailed.Text = ex.Message;
+					UploadFailed.Text = "Invalid format. If you have title columns, tick 'Ignore First Row'";
 				}
 
 				using (SqlCommand Merge = new SqlCommand("INSERT INTO WordBank(UserID, Word, Definition, Sentence1, Sentence2, Informal) SELECT UserID, Word, Definition, Sentence1, Sentence2, Informal FROM WordBank_Staging WHERE NOT EXISTS (SELECT WORD FROM WordBank WHERE WordBank.Word = WordBank_Staging.Word AND WordBank.UserID = WordBank_Staging.UserID);", connection)) {

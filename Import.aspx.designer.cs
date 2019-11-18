@@ -58,6 +58,15 @@ namespace WordBank {
 		protected global::System.Web.UI.WebControls.FileUpload Upload;
 
 		/// <summary>
+		/// TitleCheckBox control.
+		/// </summary>
+		/// <remarks>
+		/// Auto-generated field.
+		/// To modify move field declaration from designer file to code-behind file.
+		/// </remarks>
+		protected global::System.Web.UI.WebControls.CheckBox TitleCheckBox;
+
+		/// <summary>
 		/// UploadBtn control.
 		/// </summary>
 		/// <remarks>
@@ -74,15 +83,6 @@ namespace WordBank {
 		/// To modify move field declaration from designer file to code-behind file.
 		/// </remarks>
 		protected global::System.Web.UI.WebControls.RegularExpressionValidator regexValidator;
-
-		/// <summary>
-		/// TitleCheckBox control.
-		/// </summary>
-		/// <remarks>
-		/// Auto-generated field.
-		/// To modify move field declaration from designer file to code-behind file.
-		/// </remarks>
-		protected global::System.Web.UI.WebControls.CheckBox TitleCheckBox;
 
 		/// <summary>
 		/// GridView control.

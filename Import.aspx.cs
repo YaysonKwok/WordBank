@@ -37,7 +37,6 @@ namespace WordBank {
 				DataTable.Columns.Add(Sentence1);
 				DataTable.Columns.Add(Sentence2);
 				DataTable.Columns[Sentence2].DefaultValue = "";
-				Informal.DataType = System.Type.GetType("System.Boolean");
 				DataTable.Columns.Add(Informal);
 
 				if (TitleCheckBox.Checked) {
@@ -49,7 +48,12 @@ namespace WordBank {
 						DataRow newRow = DataTable.NewRow();
 
 						newRow[Word] = fieldData[0];
-						newRow[Informal] = fieldData[1];
+						if (fieldData[1].ToLower() == "yes" || fieldData[1].ToLower() == "true" || fieldData[1].ToLower() == "y") {
+							newRow[Informal] = true;
+						}
+						else {
+							newRow[Informal] = false;
+						}
 						newRow[Definition] = fieldData[2];
 						newRow[Sentence1] = fieldData[3];
 						newRow[Sentence2] = fieldData[4];
@@ -89,7 +93,7 @@ namespace WordBank {
 					}
 				}
 				catch (Exception ex) {
-					UploadFailed.Text = "Invalid format. If you have title columns, tick 'Ignore First Row'";
+					UploadFailed.Text = ex.Message;
 				}
 
 				using (SqlCommand Merge = new SqlCommand("INSERT INTO WordBank(UserID, Word, Definition, Sentence1, Sentence2, Informal) SELECT UserID, Word, Definition, Sentence1, Sentence2, Informal FROM WordBank_Staging WHERE NOT EXISTS (SELECT WORD FROM WordBank WHERE WordBank.Word = WordBank_Staging.Word AND WordBank.UserID = WordBank_Staging.UserID);", connection)) {

@@ -13,7 +13,7 @@ namespace WordBank {
 		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
 		protected void Page_Load(object sender, EventArgs e) {
 			connection.Open();
-			if (Session["UsernameID"] == null) {
+			if (Session["Username"] == null) {
 				Response.Redirect("~/Account/Login.aspx");
 			}
 
@@ -25,8 +25,8 @@ namespace WordBank {
 		}
 
 		private void CheckWordTotal() {
-			using (SqlCommand WordCheck = new SqlCommand("SELECT COUNT(*) FROM WordBank WHERE UserID = @UsernameID", connection)) {
-				WordCheck.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
+			using (SqlCommand WordCheck = new SqlCommand("SELECT COUNT(*) FROM WordBank WHERE Username = @Username", connection)) {
+				WordCheck.Parameters.AddWithValue("@Username", Session["Username"]);
 				int WordAmount = (int)WordCheck.ExecuteScalar();
 				if (WordAmount < 4) {
 					Session["RedirectFromPractice"] = true;
@@ -78,8 +78,8 @@ namespace WordBank {
 
 			if ((bool)Session["ReSort"]) {
 				Session["ReSortCounter"] = (int) Session["ReSortCounter"] + 1;
-				using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 4 Word, Definition, Sentence1, (CorrectWord - WordAttempts) AS Difference, LastWordPractice FROM WordBank WHERE UserID = @UsernameID ORDER BY LastWordPractice, Difference", connection)) {
-					PracticeWord.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
+				using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 4 Word, Definition, Sentence1, (CorrectWord - WordAttempts) AS Difference, LastWordPractice FROM WordBank WHERE Username = @Username ORDER BY LastWordPractice, Difference", connection)) {
+					PracticeWord.Parameters.AddWithValue("@Username", Session["Username"]);
 
 					using (SqlDataReader DataReader = PracticeWord.ExecuteReader()) {
 						if (DataReader != null) {
@@ -114,8 +114,8 @@ namespace WordBank {
 			else {
 				Session["ReSort"] = true;
 				Session["ReSortCounter"] = 0;
-				using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 5 Word, Definition, Sentence1, (CorrectWord - WordAttempts) AS Difference, LastWordPractice FROM WordBank WHERE UserID = @UsernameID ORDER BY LastWordPractice DESC, Difference", connection)) {
-					PracticeWord.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
+				using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 5 Word, Definition, Sentence1, (CorrectWord - WordAttempts) AS Difference, LastWordPractice FROM WordBank WHERE Username = @Username ORDER BY LastWordPractice DESC, Difference", connection)) {
+					PracticeWord.Parameters.AddWithValue("@Username", Session["Username"]);
 
 					using (SqlDataReader DataReader = PracticeWord.ExecuteReader()) {
 						if (DataReader != null) {

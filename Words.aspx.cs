@@ -11,7 +11,7 @@ namespace WordBank {
 		private const string DESCENDING = " DESC";
 
 		protected void Page_Load(object sender, EventArgs e) {
-			if (Session["UsernameID"] == null) {
+			if (Session["Username"] == null) {
 				Response.Redirect("~/Account/Login.aspx");
 			}
 
@@ -33,8 +33,8 @@ namespace WordBank {
 
 		private void CheckWordTotal() {
 			connection.Open();
-			using (SqlCommand WordCheck = new SqlCommand("SELECT COUNT(*) FROM WordBank WHERE UserID = @UsernameID", connection)) {
-				WordCheck.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
+			using (SqlCommand WordCheck = new SqlCommand("SELECT COUNT(*) FROM WordBank WHERE Username = @Username", connection)) {
+				WordCheck.Parameters.AddWithValue("@Username", Session["Username"]);
 				int WordAmount = (int)WordCheck.ExecuteScalar();
 				if (WordAmount < 1) {
 					Session["RedirectFromWordList"] = true;
@@ -47,9 +47,9 @@ namespace WordBank {
 		protected void GridView_RowDeleting(object sender, GridViewDeleteEventArgs e) {
 			connection.Open();
 			string Word = GridView.Rows[e.RowIndex].Cells[1].Text;
-			using (SqlCommand DeleteWord = new SqlCommand("Delete FROM WordBank WHERE Word= @Word AND UserID = @UsernameID", connection)) {
+			using (SqlCommand DeleteWord = new SqlCommand("Delete FROM WordBank WHERE Word= @Word AND Username = @Username", connection)) {
 				DeleteWord.Parameters.AddWithValue("@Word", Word);
-				DeleteWord.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
+				DeleteWord.Parameters.AddWithValue("@Username", Session["Username"]);
 				DeleteWord.ExecuteNonQuery();
 			}
 			connection.Close();
@@ -70,10 +70,10 @@ namespace WordBank {
 			TextBox txtDefinition = (TextBox)row.Cells[2].Controls[0];
 			int WordID = Convert.ToInt32(GridView.DataKeys[e.RowIndex].Value.ToString());
 			GridView.EditIndex = -1;
-			using (SqlCommand Update = new SqlCommand("Update WordBank Set Word = @Word, Definition = @Definition WHERE UserID = @UsernameID AND ID = @ID", connection)) {
+			using (SqlCommand Update = new SqlCommand("Update WordBank Set Word = @Word, Definition = @Definition WHERE Username = @Username AND ID = @ID", connection)) {
 				Update.Parameters.AddWithValue("@Word", txtWord.Text);
 				Update.Parameters.AddWithValue("@Definition", txtDefinition.Text);
-				Update.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
+				Update.Parameters.AddWithValue("@Username", Session["Username"]);
 				Update.Parameters.AddWithValue("@ID", WordID);
 				Update.ExecuteNonQuery();
 				;
@@ -101,8 +101,8 @@ namespace WordBank {
 
 		private void SortGridView(string sortExpression, string direction) {
 			connection.Open();
-			using (SqlCommand Data = new SqlCommand("SELECT ID, Word, Definition, Sentence1, CorrectWord, WordAttempts, CorrectDefinition, DefinitionAttempts, Informal, DateCreated FROM WordBank WHERE UserID = @UsernameID", connection)) {
-				Data.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
+			using (SqlCommand Data = new SqlCommand("SELECT ID, Word, Definition, Sentence1, Sentence2, CorrectWord, WordAttempts, CorrectDefinition, DefinitionAttempts, Informal, DateCreated FROM WordBank WHERE Username = @Username", connection)) {
+				Data.Parameters.AddWithValue("@Username", Session["Username"]);
 
 				var dataReader = Data.ExecuteReader();
 				var dataTable = new DataTable();
@@ -129,8 +129,8 @@ namespace WordBank {
 		}
 		protected void GenerateTable() {
 			connection.Open();
-			using (SqlCommand Data = new SqlCommand("SELECT ID, Word, Definition, Sentence1, Sentence2, CorrectWord, WordAttempts, CorrectDefinition, DefinitionAttempts, Informal, DateCreated FROM WordBank WHERE UserID = @UsernameID", connection)) {
-				Data.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
+			using (SqlCommand Data = new SqlCommand("SELECT ID, Word, Definition, Sentence1, Sentence2, CorrectWord, WordAttempts, CorrectDefinition, DefinitionAttempts, Informal, DateCreated FROM WordBank WHERE Username = @Username", connection)) {
+				Data.Parameters.AddWithValue("@Username", Session["Username"]);
 				SqlDataReader reader = Data.ExecuteReader();
 				GridView.DataSource = reader;
 				GridView.DataBind();
@@ -146,8 +146,8 @@ namespace WordBank {
 		}
 
 		protected void ExportCSVBtn_Click(object sender, EventArgs e) {
-				using (SqlCommand Export = new SqlCommand("SELECT Word,Informal, Definition, Sentence1 AS Contextual_Sentence, Sentence2 AS Personal_Sentence FROM WordBank WHERE UserID = @UsernameID", connection)) {
-				Export.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
+				using (SqlCommand Export = new SqlCommand("SELECT Word,Informal, Definition, Sentence1 AS Contextual_Sentence, Sentence2 AS Personal_Sentence FROM WordBank WHERE Username = @Username", connection)) {
+				Export.Parameters.AddWithValue("@Username", Session["Username"]);
 				using (SqlDataAdapter sda = new SqlDataAdapter()) {
 						sda.SelectCommand = Export;
 						using (DataTable dt = new DataTable()) {

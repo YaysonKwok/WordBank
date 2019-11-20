@@ -42,7 +42,6 @@ namespace WordBank.Account
 							ExistingUsername.Parameters.AddWithValue("@Username", Username.Text);
 							SqlDataReader dr = ExistingUsername.ExecuteReader();
 							dr.Read();
-							Session["UsernameID"] = dr.GetValue(0);
 							Session["Username"] = Username.Text;
 							Session["InputRedirect"] = false;
 							connection.Close();

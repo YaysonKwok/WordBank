@@ -10,7 +10,7 @@ namespace WordBank.Account {
 		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
 
 		protected void Page_Load(object sender, EventArgs e) {
-			if (Session["UsernameID"] != null) {
+			if (Session["Username"] != null) {
 				Session["LoginRedirect"] = true;
 				Response.Redirect("~/Words.aspx");
 			}
@@ -45,7 +45,7 @@ namespace WordBank.Account {
 
 					if (dr.HasRows) {
 						dr.Read();
-						Session["UsernameID"] = dr.GetValue(0);
+						//Session["UsernameID"] = dr.GetValue(0);
 						Session["Username"] = Username.Text;
 						Session["InputRedirect"] = false;
 						LoginMessage.Text = "You have logged in!";

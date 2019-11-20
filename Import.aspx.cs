@@ -8,7 +8,7 @@ using Microsoft.VisualBasic.FileIO;
 namespace WordBank {
 	public partial class Import : System.Web.UI.Page {
 		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
-		static string UserID = "UserID";
+		static string Username = "Username";
 		DataColumn Word = new DataColumn("Word");
 		DataColumn Definition = new DataColumn("Definition");
 		DataColumn Sentence1 = new DataColumn("Sentence1");
@@ -16,7 +16,7 @@ namespace WordBank {
 		DataColumn Informal = new DataColumn("Informal");
 
 		protected void Page_Load(object sender, EventArgs e) {
-			if (Session["UsernameID"] == null) {
+			if (Session["Username"] == null) {
 				Response.Redirect("~/Account/Login.aspx");
 			}
 		}
@@ -30,8 +30,8 @@ namespace WordBank {
 
 				var parser = new TextFieldParser(Upload.FileContent);
 				parser.SetDelimiters(new string[] { "," });
-				DataTable.Columns.Add(UserID);
-				DataTable.Columns[UserID].DefaultValue = Session["UsernameID"];
+				DataTable.Columns.Add(Username);
+				DataTable.Columns[Username].DefaultValue = Session["Username"];
 				DataTable.Columns.Add(Word);
 				DataTable.Columns.Add(Definition);
 				DataTable.Columns.Add(Sentence1);
@@ -66,8 +66,8 @@ namespace WordBank {
 					using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection)) {
 						bulkCopy.DestinationTableName = "WordBank_Staging";
 						try {
-							SqlBulkCopyColumnMapping UserID = new SqlBulkCopyColumnMapping("UserID", "UserID");
-							bulkCopy.ColumnMappings.Add(UserID);
+							SqlBulkCopyColumnMapping Username = new SqlBulkCopyColumnMapping("Username", "Username");
+							bulkCopy.ColumnMappings.Add(Username);
 
 							SqlBulkCopyColumnMapping Word = new SqlBulkCopyColumnMapping("Word", "Word");
 							bulkCopy.ColumnMappings.Add(Word);
@@ -96,7 +96,7 @@ namespace WordBank {
 					UploadFailed.Text = ex.Message;
 				}
 
-				using (SqlCommand Merge = new SqlCommand("INSERT INTO WordBank(UserID, Word, Definition, Sentence1, Sentence2, Informal) SELECT UserID, Word, Definition, Sentence1, Sentence2, Informal FROM WordBank_Staging WHERE NOT EXISTS (SELECT WORD FROM WordBank WHERE WordBank.Word = WordBank_Staging.Word AND WordBank.UserID = WordBank_Staging.UserID);", connection)) {
+				using (SqlCommand Merge = new SqlCommand("INSERT INTO WordBank(Username, Word, Definition, Sentence1, Sentence2, Informal) SELECT Username, Word, Definition, Sentence1, Sentence2, Informal FROM WordBank_Staging WHERE NOT EXISTS (SELECT WORD FROM WordBank WHERE WordBank.Word = WordBank_Staging.Word AND WordBank.Username = WordBank_Staging.Username);", connection)) {
 					Merge.ExecuteNonQuery();
 				}
 

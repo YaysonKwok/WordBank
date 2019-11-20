@@ -16,7 +16,7 @@ namespace WordBank
         protected void Page_Load(object sender, EventArgs e)
         {
             connection.Open();
-            if (Session["UsernameID"] == null)
+            if (Session["Username"] == null)
             {
                 Response.Redirect("/Account/Login.aspx");
             }
@@ -72,9 +72,9 @@ namespace WordBank
             var numbers = Enumerable.Range(1, 4).OrderBy(i => ran.Next()).ToList();
             List<ListItem> Answers = new List<ListItem>();
 
-            using(SqlCommand PracticeDef = new SqlCommand("SELECT TOP 4 Word, Definition, Sentence1, (CorrectDefinition - DefinitionAttempts) AS Difference, LastDefPractice FROM WordBank WHERE UserID = @UsernameID ORDER BY LastDefPractice, Difference", connection))
+            using(SqlCommand PracticeDef = new SqlCommand("SELECT TOP 4 Word, Definition, Sentence1, (CorrectDefinition - DefinitionAttempts) AS Difference, LastDefPractice FROM WordBank WHERE Username = @Username ORDER BY LastDefPractice, Difference", connection))
             {
-                PracticeDef.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
+                PracticeDef.Parameters.AddWithValue("@Username", Session["Username"]);
 
                 using (SqlDataReader DataReader = PracticeDef.ExecuteReader())
                 {
@@ -113,9 +113,9 @@ namespace WordBank
 
         protected void CheckWordTotal()
         {
-            using (SqlCommand WordCheck = new SqlCommand("SELECT COUNT(*) FROM WordBank WHERE UserID = @UsernameID", connection))
+            using (SqlCommand WordCheck = new SqlCommand("SELECT COUNT(*) FROM WordBank WHERE Username = @Username", connection))
             {
-                WordCheck.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
+                WordCheck.Parameters.AddWithValue("@Username", Session["Username"]);
                 int WordAmount = (int)WordCheck.ExecuteScalar();
                 if (WordAmount < 4)
                 {

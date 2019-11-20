@@ -11,7 +11,7 @@ namespace WordBank {
 	public partial class EditWord : System.Web.UI.Page {
 		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
 		protected void Page_Load(object sender, EventArgs e) {
-			if (Session["UsernameID"] == null) {
+			if (Session["Username"] == null) {
 				Response.Redirect("~/Account/Login.aspx");
 			}
 
@@ -43,10 +43,11 @@ namespace WordBank {
 		}
 
 		protected void EditWord_Click(object sender, EventArgs e) {
-			using (SqlCommand Edit = new SqlCommand("Update WordBank Set Word = @Word, Definition = @Definition, Sentence1 = @Sentence1, Informal = @Informal WHERE ID = @WordID", connection)) {
+			using (SqlCommand Edit = new SqlCommand("Update WordBank Set Word = @Word, Definition = @Definition, Sentence1 = @Sentence1, Sentence2 = @Sentence2, Informal = @Informal WHERE ID = @WordID", connection)) {
 				Edit.Parameters.AddWithValue("@Word", WordInput.Text);
 				Edit.Parameters.AddWithValue("@Definition", DefinitionInput.Text);
 				Edit.Parameters.AddWithValue("@Sentence1", Sentence1Input.Text);
+				Edit.Parameters.AddWithValue("@Sentence2", Sentence2Input.Text);
 				Edit.Parameters.AddWithValue("@Informal", InformalCheckBox.Checked);
 				Edit.Parameters.AddWithValue("@WordID", Session["WordID"]);
 				connection.Open();

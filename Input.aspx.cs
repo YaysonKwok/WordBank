@@ -14,7 +14,7 @@ namespace WordBank
     {
         static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
         protected void Page_Load(object sender, EventArgs e){
-            if (Session["UsernameID"] == null){
+            if (Session["Username"] == null){
                 Response.Redirect("~/Account/Login.aspx");
             }
 
@@ -34,9 +34,9 @@ namespace WordBank
         protected void SubmitBtn_Click(object sender, EventArgs e)
         {
 			connection.Open();
-            using (SqlCommand WordCheck = new SqlCommand("SELECT COUNT(*) FROM WordBank WHERE UserID = @UsernameID AND Word = @WordCheck", connection))
+            using (SqlCommand WordCheck = new SqlCommand("SELECT COUNT(*) FROM WordBank WHERE Username = @Username AND Word = @WordCheck", connection))
             {
-                WordCheck.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
+                WordCheck.Parameters.AddWithValue("@Username", Session["Username"]);
                 WordCheck.Parameters.AddWithValue("@WordCheck", WordInput.Text);
                 WordCheck.ExecuteScalar();
 
@@ -69,9 +69,9 @@ namespace WordBank
 
         protected void InsertWord()
         {
-            using (SqlCommand Insert = new SqlCommand("INSERT INTO WordBank(UserID, Word, Definition, Sentence1, Sentence2, Informal) VALUES(@UsernameID,@Word,@Definition,@Sentence1, @Sentence2, @Informal)", connection))
+            using (SqlCommand Insert = new SqlCommand("INSERT INTO WordBank(Username, Word, Definition, Sentence1, Sentence2, Informal) VALUES(@Username,@Word,@Definition,@Sentence1, @Sentence2, @Informal)", connection))
             {
-                Insert.Parameters.AddWithValue("@UsernameID", Session["UsernameID"]);
+                Insert.Parameters.AddWithValue("@Username", Session["Username"]);
                 Insert.Parameters.AddWithValue("@Word", WordInput.Text);
                 Insert.Parameters.AddWithValue("@Definition", DefinitionInput.Text);
                 Insert.Parameters.AddWithValue("@Sentence1", Sentence1Input.Text);

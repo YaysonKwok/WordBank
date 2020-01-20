@@ -36,16 +36,10 @@
                 <%--Site Scripts--%>
             </Scripts>
         </asp:ScriptManager>
-
-        <div class="navbar navbar-inverse navbar-fixed-top">
+        <nav class="navbar navbar-dark bg-info navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" runat="server" href="~/">WordBank</a>
+                    <span class="navbar-brand">WordBank</span>
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
@@ -64,32 +58,34 @@
                                 <li><a runat="server" href="~/DefinitionPractice">Given a definition</a></li>
                             </ul>
                         </li>
-                        <li><a runat="server" href="~/Words">My Word List</a></li>
+                        <li><a runat="server" href="~/Words">My Word List</a></li>            
                     </ul>
                     <asp:LoginView runat="server" ViewStateMode="Disabled">
                         <AnonymousTemplate>
                             <ul class="nav navbar-nav navbar-right">
-                                <li class="dropdown">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><%:Session["Username"]%><span class="caret"></span></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a runat="server" href="~/Account/Settings">Settings</a></li>
-                                        <li><a runat="server" href="~/Account/Logout">Logout</a></li>
-                                    </ul>
-                                </li>
-                                <li><a runat="server" href="~/Account/Login">Log in</a></li>
-                                </li>
+                                
+                                
+                                <% if (Session["Username"] == null) { %>
+                               <li><a runat="server" href="~/Account/Login">Log in / Register</a></li>
+                                <% }
+                                else { %>
+                                <li><a runat="server"><%:Session["Username"]%></a></li>
+                                <li><a runat="server" href="~/Account/Settings">Settings</a></li>
+                                <li><a runat="server" href="~/Account/Logout">Logout</a></li>
+                                <%} %>
+                                            </li>
                             </ul>
                         </AnonymousTemplate>
                     </asp:LoginView>
                 </div>
             </div>
-        </div>
+        </nav>
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
             <hr />
             <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - WordBank</p>
+                <p>  &copy; 2019 - <%: DateTime.Now.Year %> - WordBank</p>
             </footer>
         </div>
     </form>

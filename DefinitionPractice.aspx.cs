@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -18,7 +19,9 @@ namespace WordBank
             connection.Open();
             if (Session["Username"] == null)
             {
-                Response.Redirect("/Account/Login.aspx");
+                string OriginalUrl = HttpContext.Current.Request.RawUrl;
+                string LoginPageUrl = "~/Account/Login.aspx";
+                HttpContext.Current.Response.Redirect(String.Format("{0}?ReturnUrl={1}", LoginPageUrl, OriginalUrl));
             }
             CheckWordTotal();
             if (!IsPostBack)

@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web;
 using System.Web.UI.WebControls;
 
 namespace WordBank {
@@ -12,7 +13,9 @@ namespace WordBank {
 
 		protected void Page_Load(object sender, EventArgs e) {
 			if (Session["Username"] == null) {
-				Response.Redirect("~/Account/Login.aspx");
+				string OriginalUrl = HttpContext.Current.Request.RawUrl;
+				string LoginPageUrl = "~/Account/Login.aspx";
+				HttpContext.Current.Response.Redirect(String.Format("{0}?ReturnUrl={1}", LoginPageUrl, OriginalUrl));
 			}
 
 			if ((bool)Session["EditRedirect"]) {

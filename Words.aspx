@@ -6,10 +6,12 @@
         <p>
             Hello <%:Session["Username"]%>, here are your personal word stats.
         </p>
-        
-        <p><asp:Button Text="Export" OnClick="ExportCSVBtn_Click" runat="server" /></p>
+
+        <p>
+            <asp:Button Text="Export" OnClick="ExportCSVBtn_Click" runat="server" /></p>
         <br />
-        <p><asp:Label ID="Label1" runat="server"></asp:Label></p>
+        <p>
+            <asp:Label ID="Label1" runat="server"></asp:Label></p>
     </div>
     <br />
 
@@ -59,5 +61,9 @@
                 </ItemTemplate>
             </asp:TemplateField>
         </Columns>
+
+        <HeaderStyle BackColor="LightCyan"
+            ForeColor="MediumBlue" />
+
     </asp:GridView>
 </asp:Content>

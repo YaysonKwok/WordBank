@@ -38,17 +38,22 @@ namespace WordBank.Account {
 			if (Username.Text != null ) {
 				LoginMessage.Text = "";
 				ErrorMessage.Text = "";
-				using (SqlCommand ExistingUsername = new SqlCommand("SELECT Id FROM Login WHERE Username = @Username AND Password = @Password", connection)) {
+				using (SqlCommand ExistingUsername = new SqlCommand("SELECT Redirect FROM Login WHERE Username = @Username AND Password = @Password", connection)) {
 					ExistingUsername.Parameters.AddWithValue("@Username", Username.Text);
 					ExistingUsername.Parameters.AddWithValue("@Password", PasswordHash);
 					SqlDataReader dr = ExistingUsername.ExecuteReader();
 
+
 					if (dr.HasRows) {
-						dr.Read();
-						//Session["UsernameID"] = dr.GetValue(0);
 						Session["Username"] = Username.Text;
 						Session["InputRedirect"] = false;
-						LoginMessage.Text = "You have logged in!";
+						if (this.Request.QueryString["ReturnUrl"] != null) {
+							this.Response.Redirect(Request.QueryString["ReturnUrl"].ToString());
+						}
+						else {
+							dr.Read();
+							Response.Redirect("~/" + dr.GetValue(0) + ".aspx");
+						}
 						connection.Close();
 					}
 					else {

@@ -77,12 +77,10 @@ namespace WordBank {
 						}
 					}
 				}
-
-
+			connection.Close();
 			foreach (int num in numbers) {
 				AnswerList.Items.Add(Answers[num - 1]);
 			}
-			connection.Close();
 		}
 		protected void Clear() {
 			AnswerList.Items.Clear();

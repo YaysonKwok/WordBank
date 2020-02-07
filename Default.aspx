@@ -2,11 +2,12 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
-    <div class="jumbotron container-fluid" style ="padding: 0px 20px 0px 20px;">
+    <div class="jumbotron container-fluid" style="padding: 0px 20px 0px 20px;">
         <h2 class="display-4">Word Bank</h2>
         <hr class="my-5">
-        <p class="lead"> WordBank is a free website that helps you retain your new vocabulary. It has the following features:</p>
-            <p>1. Input new words, definitions, and usage sentences.
+        <p class="lead">WordBank is a free website that helps you retain your new vocabulary. It has the following features:</p>
+        <p>
+            1. Input new words, definitions, and usage sentences.
             <br />
             2. Review through multiple-choice quizzes given words.
             <br />
@@ -16,7 +17,8 @@
             <br />
             5. Import new words, definitions, and usage sentences from a csv file.
             <br />
-            6. Export your new vocabulary to a csv file.</p>
+            6. Export your new vocabulary to a csv file.
+        </p>
     </div>
     <p>
         <a class="btn btn-primary btn-lg" data-toggle="collapse" href="#collapse" role="button" aria-expanded="false" aria-controls="collapse">Want to test out your knowledge of English vocabulary? Click Here!</a>
@@ -38,6 +40,6 @@
                     <asp:Label ID="Responselbl" runat="server"></asp:Label>
                 </div>
             </div>
-        </div>
+    </div>
     </div>
 </asp:Content>

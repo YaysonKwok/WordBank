@@ -14,10 +14,22 @@ namespace WordBank {
 		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
 		protected void Page_Load(object sender, EventArgs e) {
 			connection.Open();
+
 			if (Session["Username"] == null) {
 				string OriginalUrl = HttpContext.Current.Request.RawUrl;
 				string LoginPageUrl = "~/Account/Login.aspx";
 				HttpContext.Current.Response.Redirect(String.Format("{0}?ReturnUrl={1}", LoginPageUrl, OriginalUrl));
+			}
+
+			using (SqlCommand CheckResortValue = new SqlCommand("SELECT Resort FROM Login WHERE Username = @Username", connection)) {
+				CheckResortValue.Parameters.AddWithValue("@Username", Session["Username"]);
+
+				using (SqlDataReader DataReader = CheckResortValue.ExecuteReader()) {
+					if (DataReader != null) {
+						DataReader.Read();
+						Session["resortValue"] = (int)DataReader.GetValue(0);
+					}
+				}
 			}
 
 			if (!IsPostBack) {
@@ -25,6 +37,7 @@ namespace WordBank {
 				Clear();
 				GenerateNewQuestion();
 			}
+
 		}
 
 		private void CheckWordTotal() {
@@ -48,7 +61,7 @@ namespace WordBank {
 			else if (Session["SelectedAnswer"].ToString().Equals(Session["Answer"].ToString())) {
 				Responselbl.Attributes.Add("class", "alert alert-success");
 				Responselbl.Text = "Correct! Here's a new word";
-				using (SqlCommand CorrectAnswerUpdate = new SqlCommand("UPDATE WordBank SET CorrectWord = CorrectWord + 1, LastWordPractice = GETDATE()  WHERE Word = @Word", connection)) {
+				using (SqlCommand CorrectAnswerUpdate = new SqlCommand("UPDATE WordBank SET CorrectWord = CorrectWord + 1, LastWordPractice = GETDATE() WHERE Word = @Word", connection)) {
 					CorrectAnswerUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
 					CorrectAnswerUpdate.ExecuteNonQuery();
 				}
@@ -61,7 +74,7 @@ namespace WordBank {
 				Responselbl.Attributes.Add("class", "alert alert-danger");
 				Responselbl.Text = "Incorrect, Try Again";
 				AnswerList.Items[AnswerList.SelectedIndex].Enabled = false;
-				using (SqlCommand AttemptUpdate = new SqlCommand("UPDATE WordBank SET WordAttempts = WordAttempts + 1, LastWordPractice = GETDATE() WHERE Word = @Word", connection)) {
+				using (SqlCommand AttemptUpdate = new SqlCommand("UPDATE WordBank SET IncorrectWord = IncorrectWord + 1, LastWordPractice = GETDATE() WHERE Word = @Word", connection)) {
 					AttemptUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
 					AttemptUpdate.ExecuteNonQuery();
 				}
@@ -75,13 +88,13 @@ namespace WordBank {
 			var numbers = Enumerable.Range(1, 4).OrderBy(i => ran.Next()).ToList();
 			List<ListItem> Answers = new List<ListItem>();
 
-			if ((int) Session["ReSortCounter"] == 4) {
+			if ((int) Session["ReSortCounter"] == (int) Session["resortValue"]) {
 				Session["ReSort"] = false;
 			}
 
 			if ((bool)Session["ReSort"]) {
 				Session["ReSortCounter"] = (int) Session["ReSortCounter"] + 1;
-				using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 4 Word, Definition, Sentence1, (CorrectWord - WordAttempts) AS Difference, LastWordPractice FROM WordBank WHERE Username = @Username ORDER BY LastWordPractice, Difference", connection)) {
+				using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 4 Word, Definition, Sentence1, (CorrectWord - IncorrectWord) AS Difference, LastWordPractice FROM WordBank WHERE Username = @Username ORDER BY Difference ASC, LastWordPractice DESC", connection)) {
 					PracticeWord.Parameters.AddWithValue("@Username", Session["Username"]);
 
 					using (SqlDataReader DataReader = PracticeWord.ExecuteReader()) {
@@ -117,7 +130,7 @@ namespace WordBank {
 			else {
 				Session["ReSort"] = true;
 				Session["ReSortCounter"] = 0;
-				using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 5 Word, Definition, Sentence1, (CorrectWord - WordAttempts) AS Difference, LastWordPractice FROM WordBank WHERE Username = @Username ORDER BY LastWordPractice DESC, Difference", connection)) {
+				using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 5 Word, Definition, Sentence1, (CorrectWord - IncorrectWord) AS Difference, LastWordPractice FROM WordBank WHERE Username = @Username ORDER BY Difference ASC, LastWordPractice DESC ", connection)) {
 					PracticeWord.Parameters.AddWithValue("@Username", Session["Username"]);
 
 					using (SqlDataReader DataReader = PracticeWord.ExecuteReader()) {

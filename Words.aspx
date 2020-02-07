@@ -41,12 +41,12 @@
                 HeaderText="Personal Sentence" />
             <asp:BoundField DataField="CorrectWord"
                 HeaderText="Corr Word Count" SortExpression="CorrectWord" ReadOnly="true" />
-            <asp:BoundField DataField="WordAttempts"
-                HeaderText="Incorr Word Count" SortExpression="WordAttempts" ReadOnly="true" />
+            <asp:BoundField DataField="IncorrectWord"
+                HeaderText="Incorr Word Count" SortExpression="IncorrectWord" ReadOnly="true" />
             <asp:BoundField DataField="CorrectDefinition"
                 HeaderText="Corr Def Count" SortExpression="CorrectDefinition" ReadOnly="true" />
-            <asp:BoundField DataField="DefinitionAttempts"
-                HeaderText="Incorr Def Count" SortExpression="DefinitionAttempts" ReadOnly="true" />
+            <asp:BoundField DataField="IncorrectDefinition"
+                HeaderText="Incorr Def Count" SortExpression="IncorrectDefinition" ReadOnly="true" />
             <asp:TemplateField HeaderText="Informal" SortExpression="Informal">
                 <ItemTemplate>
                     <asp:CheckBox ID="chkbox1" runat="server" Checked='<%# Eval("Informal") %>' onclick="return false;" />

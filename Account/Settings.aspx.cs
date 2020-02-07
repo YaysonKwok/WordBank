@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace WordBank.Account {
 	public partial class Settings : System.Web.UI.Page {
 		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
-
+		protected int resortValue { get; set; }
 		protected void Page_Load(object sender, EventArgs e) {
 
 			if (Session["Username"] == null) {
@@ -19,12 +14,13 @@ namespace WordBank.Account {
 			}
 
 			connection.Open();
-			using (SqlCommand RedirectQuery = new SqlCommand("SELECT Redirect FROM Login WHERE Username = @Username", connection)) {
+			using (SqlCommand RedirectQuery = new SqlCommand("SELECT Redirect, Resort FROM Login WHERE Username = @Username", connection)) {
 				RedirectQuery.Parameters.AddWithValue("@Username", Session["Username"]);
-				SqlDataReader dr = RedirectQuery.ExecuteReader();
+				SqlDataReader DataReader = RedirectQuery.ExecuteReader();
 
-				if (dr.HasRows) {
-					dr.Read();
+				if (DataReader.HasRows) {
+					DataReader.Read();
+					this.resortValue = (int) DataReader.GetValue(1);
 				}
 				connection.Close();
 			}
@@ -36,57 +32,50 @@ namespace WordBank.Account {
 			var hash = sha256.ComputeHash(bytes);
 			string PasswordHash = Convert.ToBase64String(hash);
 			//Changing redirect
-			if (RedirectList.SelectedItem.Value != "None" && NewPassword.Text == String.Empty && ConfirmPassword.Text == String.Empty) {
+			if (RedirectList.SelectedItem.Value != "None") {
 				using (SqlCommand InsertRedirect = new SqlCommand("UPDATE Login SET Redirect = @Redirect WHERE Username = @Username", connection)) {
 					InsertRedirect.Parameters.AddWithValue("@Username", Session["Username"]);
 					InsertRedirect.Parameters.AddWithValue("@Redirect", RedirectList.SelectedItem.Value);
 					try {
 						InsertRedirect.ExecuteNonQuery();
-						SubmitResponse.Attributes.Add("class", "alert alert-success");
-						SubmitResponse.Text = "Redirect Updated";
+						RedirectResponse.Attributes.Add("class", "alert alert-success");
+						RedirectResponse.Text = "Redirect Updated";
 					}
 					catch (Exception ex) {
-						SubmitResponse.Text = ex.ToString();
+						RedirectResponse.Text = ex.ToString();
 					}
 				}
 			}
 			//Changing Password
-			else if (RedirectList.SelectedItem.Value == "None" && NewPassword.Text != String.Empty && ConfirmPassword.Text != String.Empty && NewPassword.Text == ConfirmPassword.Text) {
+			if (NewPassword.Text != String.Empty && ConfirmPassword.Text != String.Empty && NewPassword.Text == ConfirmPassword.Text) {
 				using (SqlCommand InsertPassword = new SqlCommand("UPDATE Login SET Password = @Password WHERE Username = @Username", connection)) {
 					InsertPassword.Parameters.AddWithValue("@Username", Session["Username"]);
 					InsertPassword.Parameters.AddWithValue("@Password", PasswordHash);
 					try {
 						InsertPassword.ExecuteNonQuery();
-						SubmitResponse.Attributes.Add("class", "alert alert-success");
-						SubmitResponse.Text = "Password Updated";
+						PasswordResponse.Attributes.Add("class", "alert alert-success");
+						PasswordResponse.Text = "Password Updated";
 					}
 					catch (Exception ex) {
-						SubmitResponse.Text = ex.ToString();
+						PasswordResponse.Text = ex.ToString();
 					}
 				}
-			}//Changing Password & Redirect
-			else if (RedirectList.SelectedItem.Value != "None" && NewPassword.Text != String.Empty && ConfirmPassword.Text != String.Empty && NewPassword.Text == ConfirmPassword.Text) {
-				using (SqlCommand InsertBoth = new SqlCommand("UPDATE Login SET Password = @Password, Redirect = @Redirect  WHERE Username = @Username", connection)) {
-					InsertBoth.Parameters.AddWithValue("@Username", Session["Username"]);
-					InsertBoth.Parameters.AddWithValue("@Password", PasswordHash);
-					InsertBoth.Parameters.AddWithValue("@Redirect", RedirectList.SelectedItem.Value);
+			}
+
+			if (ResortAmount.Text != String.Empty) {
+				using (SqlCommand InsertResort = new SqlCommand("Update Login SET Resort = @Resort WHERE Username = @Username", connection)) {
+					InsertResort.Parameters.AddWithValue("@Username", Session["Username"]);
+					InsertResort.Parameters.AddWithValue("@Resort", ResortAmount.Text);
 					try {
-						InsertBoth.ExecuteNonQuery();
-						SubmitResponse.Attributes.Add("class", "alert alert-success");
-						SubmitResponse.Text = "Profile Updated";
+						InsertResort.ExecuteNonQuery();
+						ResortResponse.Attributes.Add("class", "alert alert-success");
+						ResortResponse.Text = "Password Updated";
 					}
 					catch (Exception ex) {
-						SubmitResponse.Text = ex.ToString();
+						ResortResponse.Text = ex.ToString();
 					}
 				}
 			}
-			//Error
-			else {
-				SubmitResponse.Attributes.Add("class", "alert alert-danger");
-				SubmitResponse.Text = "New and old passwords don't match!";
-			}
-
-
 
 			connection.Close();
 		}

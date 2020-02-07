@@ -22,6 +22,15 @@ namespace WordBank.Account {
 		protected global::System.Web.UI.WebControls.DropDownList RedirectList;
 
 		/// <summary>
+		/// ResortAmount control.
+		/// </summary>
+		/// <remarks>
+		/// Auto-generated field.
+		/// To modify move field declaration from designer file to code-behind file.
+		/// </remarks>
+		protected global::System.Web.UI.WebControls.TextBox ResortAmount;
+
+		/// <summary>
 		/// NewPassword control.
 		/// </summary>
 		/// <remarks>
@@ -58,12 +67,30 @@ namespace WordBank.Account {
 		protected global::System.Web.UI.WebControls.Button SubmitBtn;
 
 		/// <summary>
-		/// SubmitResponse control.
+		/// RedirectResponse control.
 		/// </summary>
 		/// <remarks>
 		/// Auto-generated field.
 		/// To modify move field declaration from designer file to code-behind file.
 		/// </remarks>
-		protected global::System.Web.UI.WebControls.Label SubmitResponse;
+		protected global::System.Web.UI.WebControls.Label RedirectResponse;
+
+		/// <summary>
+		/// PasswordResponse control.
+		/// </summary>
+		/// <remarks>
+		/// Auto-generated field.
+		/// To modify move field declaration from designer file to code-behind file.
+		/// </remarks>
+		protected global::System.Web.UI.WebControls.Label PasswordResponse;
+
+		/// <summary>
+		/// ResortResponse control.
+		/// </summary>
+		/// <remarks>
+		/// Auto-generated field.
+		/// To modify move field declaration from designer file to code-behind file.
+		/// </remarks>
+		protected global::System.Web.UI.WebControls.Label ResortResponse;
 	}
 }

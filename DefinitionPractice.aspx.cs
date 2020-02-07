@@ -41,8 +41,7 @@ namespace WordBank
                 Responselbl.Attributes.Add("class", "alert alert-danger");
                 Responselbl.Text = "You must choose an answer!";
             }
-
-            if (Session["SelectedAnswer"].ToString().Equals(Session["Answer"].ToString()))
+            else if (Session["SelectedAnswer"].ToString().Equals(Session["Answer"].ToString()))
             {
                 Responselbl.Attributes.Add("class", "alert alert-success");
                 Responselbl.Text = "Correct! Here's a new definition";
@@ -60,7 +59,7 @@ namespace WordBank
                 Responselbl.Attributes.Add("class", "alert alert-danger");
                 Responselbl.Text = "Incorrect, Try Again";
                 AnswerList.Items[AnswerList.SelectedIndex].Enabled = false;
-                using (SqlCommand AttemptUpdate = new SqlCommand("UPDATE WordBank SET DefinitionAttempts = DefinitionAttempts + 1, LastDefPractice = GETDATE() WHERE Word = @Word", connection))
+                using (SqlCommand AttemptUpdate = new SqlCommand("UPDATE WordBank SET IncorrectDefinition = IncorrectDefinition + 1, LastDefPractice = GETDATE() WHERE Word = @Word", connection))
                 {
                     AttemptUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
                     AttemptUpdate.ExecuteNonQuery();
@@ -75,7 +74,7 @@ namespace WordBank
             var numbers = Enumerable.Range(1, 4).OrderBy(i => ran.Next()).ToList();
             List<ListItem> Answers = new List<ListItem>();
 
-            using(SqlCommand PracticeDef = new SqlCommand("SELECT TOP 4 Word, Definition, Sentence1, (CorrectDefinition - DefinitionAttempts) AS Difference, LastDefPractice FROM WordBank WHERE Username = @Username ORDER BY LastDefPractice, Difference", connection))
+            using(SqlCommand PracticeDef = new SqlCommand("SELECT TOP 4 Word, Definition, Sentence1, (CorrectDefinition - IncorrectDefinition) AS Difference, LastDefPractice FROM WordBank WHERE Username = @Username ORDER BY LastDefPractice, Difference", connection))
             {
                 PracticeDef.Parameters.AddWithValue("@Username", Session["Username"]);
 

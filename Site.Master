@@ -64,7 +64,6 @@
                         <AnonymousTemplate>
                             <ul class="nav navbar-nav navbar-right">
                                 
-                                
                                 <% if (Session["Username"] == null) { %>
                                <li><a runat="server" href="~/Account/Login">Log in / Register</a></li>
                                 <% }

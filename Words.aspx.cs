@@ -104,7 +104,7 @@ namespace WordBank {
 
 		private void SortGridView(string sortExpression, string direction) {
 			connection.Open();
-			using (SqlCommand Data = new SqlCommand("SELECT ID, Word, Definition, Sentence1, Sentence2, CorrectWord, WordAttempts, CorrectDefinition, DefinitionAttempts, Informal, DateCreated FROM WordBank WHERE Username = @Username", connection)) {
+			using (SqlCommand Data = new SqlCommand("SELECT ID, Word, Definition, Sentence1, Sentence2, CorrectWord, IncorrectWord, CorrectDefinition, IncorrectDefinition, Informal, DateCreated FROM WordBank WHERE Username = @Username", connection)) {
 				Data.Parameters.AddWithValue("@Username", Session["Username"]);
 
 				var dataReader = Data.ExecuteReader();
@@ -132,7 +132,7 @@ namespace WordBank {
 		}
 		protected void GenerateTable() {
 			connection.Open();
-			using (SqlCommand Data = new SqlCommand("SELECT ID, Word, Definition, Sentence1, Sentence2, CorrectWord, WordAttempts, CorrectDefinition, DefinitionAttempts, Informal, DateCreated FROM WordBank WHERE Username = @Username", connection)) {
+			using (SqlCommand Data = new SqlCommand("SELECT ID, Word, Definition, Sentence1, Sentence2, CorrectWord, IncorrectWord, CorrectDefinition, IncorrectDefinition, Informal, DateCreated FROM WordBank WHERE Username = @Username", connection)) {
 				Data.Parameters.AddWithValue("@Username", Session["Username"]);
 				SqlDataReader reader = Data.ExecuteReader();
 				GridView.DataSource = reader;

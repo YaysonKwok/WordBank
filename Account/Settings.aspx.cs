@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 
 namespace WordBank.Account {
 	public partial class Settings : System.Web.UI.Page {
-		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
+		readonly static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
 		protected int resortValue { get; set; }
 		protected void Page_Load(object sender, EventArgs e) {
 
@@ -62,10 +62,10 @@ namespace WordBank.Account {
 				}
 			}
 
-			if (ResortAmount.Text != String.Empty) {
+			if (ResortList.SelectedItem.Value != "None") {
 				using (SqlCommand InsertResort = new SqlCommand("Update Login SET Resort = @Resort WHERE Username = @Username", connection)) {
 					InsertResort.Parameters.AddWithValue("@Username", Session["Username"]);
-					InsertResort.Parameters.AddWithValue("@Resort", ResortAmount.Text);
+					InsertResort.Parameters.AddWithValue("@Resort", ResortList.SelectedItem.Value);
 					try {
 						InsertResort.ExecuteNonQuery();
 						ResortResponse.Attributes.Add("class", "alert alert-success");

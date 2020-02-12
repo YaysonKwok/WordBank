@@ -7,7 +7,7 @@ using System.Web.UI;
 
 namespace WordBank.Account {
 	public partial class Login : Page {
-		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
+		readonly static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
 
 		protected void Page_Load(object sender, EventArgs e) {
 			if (Session["Username"] != null) {
@@ -21,10 +21,14 @@ namespace WordBank.Account {
 			Session["RedirectFromWordList"] = false;
 			Session["ReSort"] = true;
 			Session["ReSortCounter"] = 0;
+			Session["WordIndex"] = 0;
+			Session["DefIndex"] = 0;
+
+
 			RegisterHyperLink.NavigateUrl = "Register";
 			var returnUrl = HttpUtility.UrlEncode(Request.QueryString["ReturnUrl"]);
 			if (!String.IsNullOrEmpty(returnUrl)) {
-				RegisterHyperLink.NavigateUrl = "?ReturnUrl=" + returnUrl;
+				RegisterHyperLink.NavigateUrl = "Register?ReturnUrl=" + returnUrl;
 			}
 		}
 
@@ -63,6 +67,7 @@ namespace WordBank.Account {
 
 
 				}
+
 			}
 			else {
 

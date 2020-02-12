@@ -20,11 +20,24 @@
                         </div>
                         <div class="form-group">
                             <label for="amount-resort">Attempts before resorts</label>
-                            <asp:TextBox runat="server" ID="ResortAmount" TextMode="Number" min="1" CssClass="form-control" value="<%= resortValue %>" />
+                            <asp:DropDownList runat="server" CssClass="form-control" ID="ResortList">
+                                <asp:ListItem Text="Select One" Value="None"></asp:ListItem>
+                                <asp:ListItem Text="1" Value="1"></asp:ListItem>
+                                <asp:ListItem Text="2" Value="2"></asp:ListItem>
+                                <asp:ListItem Text="3" Value="3"></asp:ListItem>
+                                <asp:ListItem Text="4" Value="4"></asp:ListItem>
+                                <asp:ListItem Text="5" Value="5"></asp:ListItem>
+                                <asp:ListItem Text="6" Value="6"></asp:ListItem>
+                                <asp:ListItem Text="7" Value="7"></asp:ListItem>
+                                <asp:ListItem Text="8" Value="8"></asp:ListItem>
+                                <asp:ListItem Text="9" Value="9"></asp:ListItem>
+                                <asp:ListItem Text="10" Value="10"></asp:ListItem>
+                            </asp:DropDownList>
                         </div>
                         <div class="form-group">
                             <label for="account-pass">New Password</label>
-                            <asp:TextBox runat="server" ID="NewPassword" TextMode="Password" CssClass="form-control" /> <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server"
+                            <asp:TextBox runat="server" ID="NewPassword" TextMode="Password" CssClass="form-control" />
+                            <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server"
                                 CssClass="text-danger"
                                 ErrorMessage="Password must contain at least 8 characters, 1 digit, 1 special character"
                                 ValidationExpression="^.*(?=.{8,})(?=.*[\d])(?=.*[\W]).*$"

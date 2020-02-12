@@ -22,13 +22,13 @@ namespace WordBank.Account {
 		protected global::System.Web.UI.WebControls.DropDownList RedirectList;
 
 		/// <summary>
-		/// ResortAmount control.
+		/// ResortList control.
 		/// </summary>
 		/// <remarks>
 		/// Auto-generated field.
 		/// To modify move field declaration from designer file to code-behind file.
 		/// </remarks>
-		protected global::System.Web.UI.WebControls.TextBox ResortAmount;
+		protected global::System.Web.UI.WebControls.DropDownList ResortList;
 
 		/// <summary>
 		/// NewPassword control.

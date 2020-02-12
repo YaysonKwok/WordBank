@@ -1,6 +1,10 @@
 ﻿<%@ Page Title="Word Practice" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="WordPractice.aspx.cs" Inherits="WordBank.WordPractice" %>
 
+
+
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+            <ContentTemplate>
     <br />
     Please select the correct definition:
     <br />
@@ -21,4 +25,6 @@
     <br />
     <br />
     <asp:Label ID="Responselbl" runat="server"></asp:Label>
+                            </ContentTemplate>
+        </asp:UpdatePanel>
 </asp:Content>

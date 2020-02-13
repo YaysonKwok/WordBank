@@ -69,7 +69,7 @@ namespace WordBank.Account {
 					try {
 						InsertResort.ExecuteNonQuery();
 						ResortResponse.Attributes.Add("class", "alert alert-success");
-						ResortResponse.Text = "Password Updated";
+						ResortResponse.Text = "Resort Attempts Updated";
 					}
 					catch (Exception ex) {
 						ResortResponse.Text = ex.ToString();

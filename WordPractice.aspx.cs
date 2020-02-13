@@ -65,7 +65,7 @@ namespace WordBank {
 			}
 			else if (Session["SelectedAnswer"].ToString().Equals(Session["Answer"].ToString())) {
 				Responselbl.Attributes.Add("class", "alert alert-success");
-				Responselbl.Text = "Correct! Here's a new word" + Session["WordIndex"] + Session["resortValue"];
+				Responselbl.Text = "Correct! Here's a new word";
 				using (SqlCommand CorrectAnswerUpdate = new SqlCommand("UPDATE WordBank SET CorrectWord = CorrectWord + 1, LastWordPractice = GETDATE() WHERE Word = @Word", connection)) {
 					CorrectAnswerUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
 					CorrectAnswerUpdate.ExecuteNonQuery();

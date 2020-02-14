@@ -45,6 +45,10 @@ namespace WordBank {
 				Responselbl.Attributes.Add("class", "alert alert-danger");
 				Responselbl.Text = "You cannot sumbit a blank answer!";
 			}
+			else if(IsAnagram(Session["SelectedAnswer"].ToString(), Session["Word"].ToString()) && Session["SelectedAnswer"].ToString() != Session["Answer"].ToString()) {
+				Responselbl.Attributes.Add("class", "alert alert-warning");
+				Responselbl.Text = "Check spelling!";
+			}
 			else if (Session["SelectedAnswer"].ToString().Equals(Session["Answer"].ToString())) {
 				Responselbl.Attributes.Add("class", "alert alert-success");
 				Responselbl.Text = "Correct! Here's a new definition";
@@ -53,7 +57,6 @@ namespace WordBank {
 					CorrectAnswerUpdate.ExecuteNonQuery();
 					Session["DefIndex"] = (int)Session["DefIndex"] + 1;
 				}
-
 				Clear();
 				GenerateNewQuestion();
 			}
@@ -69,6 +72,32 @@ namespace WordBank {
 			}
 		}
 
+		private bool IsAnagram(string a, string b) {
+			if (a.Length != b.Length) {
+				return false;
+			}
+
+			var aFrequency = CalculateFrequency(a);
+			var bFrequency = CalculateFrequency(b);
+
+			foreach (var key in aFrequency.Keys) {
+				if (!bFrequency.ContainsKey(key)) return false;
+				if (aFrequency[key] != bFrequency[key]) return false;
+			}
+
+			return true;
+		}
+
+		private Dictionary<char, int> CalculateFrequency(string input) {
+			var frequency = new Dictionary<char, int>();
+			foreach (var c in input) {
+				if (!frequency.ContainsKey(c)) {
+					frequency.Add(c, 0);
+				}
+				++frequency[c];
+			}
+			return frequency;
+		}
 
 		private void GenerateNewQuestion() {
 			LetterHintLbl.Visible = false;

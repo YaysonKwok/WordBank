@@ -173,6 +173,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="DefinitionPractice.aspx" />
+    <Content Include="DefinitionPracticeFitB.aspx" />
     <Content Include="EditWord.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -332,6 +333,13 @@
     </Compile>
     <Compile Include="DefinitionPractice.aspx.designer.cs">
       <DependentUpon>DefinitionPractice.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DefinitionPracticeFitB.aspx.cs">
+      <DependentUpon>DefinitionPracticeFitB.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DefinitionPracticeFitB.aspx.designer.cs">
+      <DependentUpon>DefinitionPracticeFitB.aspx</DependentUpon>
     </Compile>
     <Compile Include="EditWord.aspx.cs">
       <DependentUpon>EditWord.aspx</DependentUpon>

@@ -10,43 +10,61 @@
 namespace WordBank {
 
 
-	public partial class WordPractice {
+	public partial class DefinitionPracticeFitB {
 
 		/// <summary>
-		/// Wordlbl control.
+		/// Definitionlbl control.
 		/// </summary>
 		/// <remarks>
 		/// Auto-generated field.
 		/// To modify move field declaration from designer file to code-behind file.
 		/// </remarks>
-		protected global::System.Web.UI.WebControls.Label Wordlbl;
+		protected global::System.Web.UI.WebControls.Label Definitionlbl;
 
 		/// <summary>
-		/// HintBtn control.
+		/// SentenceHintBtn control.
 		/// </summary>
 		/// <remarks>
 		/// Auto-generated field.
 		/// To modify move field declaration from designer file to code-behind file.
 		/// </remarks>
-		protected global::System.Web.UI.WebControls.Button HintBtn;
+		protected global::System.Web.UI.WebControls.Button SentenceHintBtn;
 
 		/// <summary>
-		/// HintLbl control.
+		/// SentenceHintLbl control.
 		/// </summary>
 		/// <remarks>
 		/// Auto-generated field.
 		/// To modify move field declaration from designer file to code-behind file.
 		/// </remarks>
-		protected global::System.Web.UI.WebControls.Label HintLbl;
+		protected global::System.Web.UI.WebControls.Label SentenceHintLbl;
 
 		/// <summary>
-		/// AnswerList control.
+		/// LetterHintBtn control.
 		/// </summary>
 		/// <remarks>
 		/// Auto-generated field.
 		/// To modify move field declaration from designer file to code-behind file.
 		/// </remarks>
-		protected global::System.Web.UI.WebControls.RadioButtonList AnswerList;
+		protected global::System.Web.UI.WebControls.Button LetterHintBtn;
+
+		/// <summary>
+		/// LetterHintLbl control.
+		/// </summary>
+		/// <remarks>
+		/// Auto-generated field.
+		/// To modify move field declaration from designer file to code-behind file.
+		/// </remarks>
+		protected global::System.Web.UI.WebControls.Label LetterHintLbl;
+
+		/// <summary>
+		/// SubmittedAnswer control.
+		/// </summary>
+		/// <remarks>
+		/// Auto-generated field.
+		/// To modify move field declaration from designer file to code-behind file.
+		/// </remarks>
+		protected global::System.Web.UI.WebControls.TextBox SubmittedAnswer;
 
 		/// <summary>
 		/// SubmitBtn control.

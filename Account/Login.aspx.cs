@@ -46,8 +46,6 @@ namespace WordBank.Account {
 					ExistingUsername.Parameters.AddWithValue("@Username", Username.Text);
 					ExistingUsername.Parameters.AddWithValue("@Password", PasswordHash);
 					SqlDataReader dr = ExistingUsername.ExecuteReader();
-
-
 					if (dr.HasRows) {
 						Session["Username"] = Username.Text;
 						Session["InputRedirect"] = false;
@@ -64,8 +62,6 @@ namespace WordBank.Account {
 						ErrorMessage.Text = "Incorrect Username or Password";
 						connection.Close();
 					}
-
-
 				}
 
 			}

@@ -19,12 +19,7 @@ namespace WordBank {
 
 		protected void Page_Load(object sender, EventArgs e) {
 			connection.Open();
-
-			if (Session["Username"] == null) {
-				string OriginalUrl = HttpContext.Current.Request.RawUrl;
-				string LoginPageUrl = "~/Account/Login.aspx";
-				HttpContext.Current.Response.Redirect(String.Format("{0}?ReturnUrl={1}", LoginPageUrl, OriginalUrl));
-			}
+			CheckLoggedIn();
 
 			using (SqlCommand CheckResortValue = new SqlCommand("SELECT Resort FROM Login WHERE Username = @Username", connection)) {
 				CheckResortValue.Parameters.AddWithValue("@Username", Session["Username"]);
@@ -36,13 +31,19 @@ namespace WordBank {
 					}
 				}
 			}
-
 			if (!IsPostBack) {
 				CheckWordTotal();
 				Clear();
 				GenerateNewQuestion();
 			}
+		}
 
+		private void CheckLoggedIn() {
+			if (Session["Username"] == null) {
+				string OriginalUrl = HttpContext.Current.Request.RawUrl;
+				string LoginPageUrl = "~/Account/Login.aspx";
+				HttpContext.Current.Response.Redirect(String.Format("{0}?ReturnUrl={1}", LoginPageUrl, OriginalUrl));
+			}
 		}
 
 		private void CheckWordTotal() {

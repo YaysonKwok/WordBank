@@ -15,7 +15,6 @@
         <asp:TextBox ID="DefinitionInput" runat="server" CssClass="form-control" required="true" TextMode="multiline"></asp:TextBox>
     </div>
 
-
     <div class="mb-3">
         <br />
         <asp:Label ID="Sentence1lbl" runat="server" Text="Contextual Sentence"></asp:Label>

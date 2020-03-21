@@ -21,7 +21,7 @@
     <div class="mb-3">
          <br />
         <asp:Label ID="Definitionlbl" runat="server" Text="Definition"></asp:Label>
-        <asp:TextBox ID="DefinitionInput" runat="server" CssClass="form-control" TextMode="multiline"></asp:TextBox>
+        <asp:TextBox ID="DefinitionInput" runat="server" CssClass="form-control" Required ="" TextMode="multiline"></asp:TextBox>
     </div>
 
     <div class="mb-3">

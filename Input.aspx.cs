@@ -35,24 +35,27 @@ namespace WordBank
 
         protected void SubmitBtn_Click(object sender, EventArgs e)
         {
-			connection.Open();
-            using (SqlCommand WordCheck = new SqlCommand("SELECT COUNT(*) FROM WordBank WHERE Username = @Username AND Word = @WordCheck", connection))
-            {
-                WordCheck.Parameters.AddWithValue("@Username", Session["Username"]);
-                WordCheck.Parameters.AddWithValue("@WordCheck", WordInput.Text);
-                WordCheck.ExecuteScalar();
-
-                if ((int)WordCheck.ExecuteScalar() != 1)
-                {
-                    InsertWord();
-                }
-                else
-                {
-                    SubmitResponse.Attributes.Add("class", "alert alert-danger");
-                    SubmitResponse.Text = "You already have this word saved!";
-                }
+            if (WordInput.Text == String.Empty) {
+                SubmitResponse.Attributes.Add("class", "alert alert-danger");
+                SubmitResponse.Text = "You cannot submit an empty word";
             }
-			connection.Close();
+            else {
+                connection.Open();
+                using (SqlCommand WordCheck = new SqlCommand("SELECT COUNT(*) FROM WordBank WHERE Username = @Username AND Word = @WordCheck", connection)) {
+                    WordCheck.Parameters.AddWithValue("@Username", Session["Username"]);
+                    WordCheck.Parameters.AddWithValue("@WordCheck", WordInput.Text);
+                    WordCheck.ExecuteScalar();
+
+                    if ((int)WordCheck.ExecuteScalar() != 1) {
+                        InsertWord();
+                    }
+                    else {
+                        SubmitResponse.Attributes.Add("class", "alert alert-danger");
+                        SubmitResponse.Text = "You already have this word saved!";
+                    }
+                }
+                connection.Close();
+            }
         }
 
         private void Clear()

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -67,14 +66,30 @@ namespace WordBank {
 			else if (Session["SelectedAnswer"].ToString().Equals(Session["Answer"].ToString())) {
 				Responselbl.Attributes.Add("class", "alert alert-success");
 				Responselbl.Text = "Correct! Here's a new word";
-				using (SqlCommand CorrectAnswerUpdate = new SqlCommand("UPDATE WordBank SET CorrectWord = CorrectWord + 1, LastWordPractice = GETDATE() WHERE Word = @Word", connection)) {
+				using (SqlCommand CorrectAnswerUpdate = new SqlCommand("UPDATE WordBank SET CorrectWord = CorrectWord + 1, LastWordPractice = GETDATE() WHERE Word = @Word AND Username = @Username", connection)) {
 					CorrectAnswerUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
+					CorrectAnswerUpdate.Parameters.AddWithValue("@Username", Session["Username"]);
 					CorrectAnswerUpdate.ExecuteNonQuery();
 					if ((int)Session["WordIndex"] == 9) {
 						Session["WordIndex"] = 0;
 					}
 					else {
 						Session["WordIndex"] = (int)Session["WordIndex"] + 1;
+					}
+				}
+
+				if (HintLbl.Visible == true) {
+					using (SqlCommand HintIncUpdate = new SqlCommand("UPDATE WordBank SET Sen_hint_inc = Sen_hint_inc + 1 WHERE Word = @Word AND Username = @Username")) {
+						HintIncUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
+						HintIncUpdate.Parameters.AddWithValue("@Username", Session["Username"]);
+						HintIncUpdate.ExecuteNonQuery();
+					}
+				}
+				else {
+					using (SqlCommand HintIncUpdate = new SqlCommand("UPDATE WordBank SET Sen_hint_dec = CASE WHEN Sen_hint_dec < Sen_hint_inc THEN Sen_hint_dec + 1 ELSE Sen_hint_dec END WHERE Word = @Word AND Username = @Username")) {
+						HintIncUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
+						HintIncUpdate.Parameters.AddWithValue("@Username", Session["Username"]);
+						HintIncUpdate.ExecuteNonQuery();
 					}
 				}
 
@@ -106,7 +121,7 @@ namespace WordBank {
 			}
 
 			if (index == (resortValue-1) || index == 0) {
-				using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 10 Word, Definition, Sentence1, (CorrectWord - IncorrectWord) AS Difference FROM WordBank WHERE Username = @Username ORDER BY Difference ASC", connection)) {
+				using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 10 Word, Definition, Sentence1, (CorrectWord - IncorrectWord) AS WordDifference, (Sen_hint_dec - Sen_hint_inc) As HintDifference FROM WordBank WHERE Username = @Username ORDER BY WordDifference ASC, HintDifference ASC ", connection)) {
 					PracticeWord.Parameters.AddWithValue("@Username", Session["Username"]);
 
 					using (SqlDataReader DataReader = PracticeWord.ExecuteReader()) {

@@ -113,7 +113,7 @@ namespace WordBank {
 			}
 
 			if (index == (resortValue - 1) || index == 0) {
-				using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 10 Word, Definition, Sentence1, (CorrectWord - IncorrectWord) AS Difference FROM WordBank WHERE Username = @Username ORDER BY Difference ASC", connection)) {
+				using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 10 Word, Definition, Sentence1, (CorrectDefinition - IncorrectDefinition) AS Difference FROM WordBank WHERE Username = @Username ORDER BY Difference ASC", connection)) {
 					PracticeWord.Parameters.AddWithValue("@Username", Session["Username"]);
 
 					using (SqlDataReader DataReader = PracticeWord.ExecuteReader()) {
@@ -136,7 +136,19 @@ namespace WordBank {
 			Session["Answer"] = Word[index];
 
 			string input = Hint[index];
+			string[] words = input.Split(' ');
 			string[] sKeywords = Word[index].Split(' ');
+
+			for (int i = 0; i < words.Length; i++) {
+				if (words[i].Equals(sKeywords[0]) && i != 0) {
+					if (words[i - 1].Equals("a") || words[i - 1].Equals("an")) {
+						words[i - 1] = "a/an";
+					}
+				}
+			}
+
+			input = String.Join(" ", words);
+
 			foreach (string sKeyword in sKeywords) {
 				try {
 					input = Regex.Replace(input, sKeyword, string.Format("______"), RegexOptions.IgnoreCase);

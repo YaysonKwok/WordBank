@@ -54,9 +54,9 @@
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Review<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a runat="server" href="~/WordPractice">Multiple Choice: Word</a></li>
-                                <li><a runat="server" href="~/DefinitionPractice">Multiple Choice: Definition</a></li>
-                                <li><a runat="server" href="~/DefinitionPracticeFitB">Fill in the blank: Definition</a></li>
+                                <li><a runat="server" href="~/WordPractice">Given a word/phrase: Multiple choice</a></li>
+                                <li><a runat="server" href="~/DefinitionPractice">Given a definition: Multiple choice</a></li>
+                                <li><a runat="server" href="~/DefinitionPracticeFitB">Given a definition: Enter word/phrase</a></li>
                             </ul>
                         </li>
                         <li><a runat="server" href="~/Words">My Word List</a></li>            

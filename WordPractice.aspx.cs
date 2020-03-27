@@ -84,17 +84,21 @@ namespace WordBank {
 				}
 
 				if (HintLbl.Visible == true) {
+					connection.Open();
 					using (SqlCommand HintIncUpdate = new SqlCommand("UPDATE WordBank SET Sen_hint_inc = Sen_hint_inc + 1 WHERE Word = @Word AND Username = @Username")) {
 						HintIncUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
 						HintIncUpdate.Parameters.AddWithValue("@Username", Session["Username"]);
 						HintIncUpdate.ExecuteNonQuery();
 					}
+					connection.Close();
 				}
 				else {
+					connection.Open();
 					using (SqlCommand HintIncUpdate = new SqlCommand("UPDATE WordBank SET Sen_hint_dec = CASE WHEN Sen_hint_dec < Sen_hint_inc THEN Sen_hint_dec + 1 ELSE Sen_hint_dec END WHERE Word = @Word AND Username = @Username")) {
 						HintIncUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
 						HintIncUpdate.Parameters.AddWithValue("@Username", Session["Username"]);
 						HintIncUpdate.ExecuteNonQuery();
+						connection.Close();
 					}
 				}
 				Clear();

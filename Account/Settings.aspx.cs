@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 
 namespace WordBank.Account {
 	public partial class Settings : System.Web.UI.Page {
-		readonly static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
+		readonly static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank"].ConnectionString);
 		protected int resortValue { get; set; }
 		protected void Page_Load(object sender, EventArgs e) {
 

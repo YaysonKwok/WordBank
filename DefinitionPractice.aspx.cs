@@ -11,15 +11,14 @@ using System.Web.UI.WebControls;
 
 namespace WordBank {
 	public partial class DefinitionPractice : Page {
-		readonly static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
+		readonly static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank"].ConnectionString);
 		string[] Word = new string[10];
 		string[] Definition = new string[10];
 		string[] Hint = new string[10];
 
 		protected void Page_Load(object sender, EventArgs e) {
-			connection.Open();
 			CheckLoggedIn();
-
+			connection.Open();
 			using (SqlCommand CheckResortValue = new SqlCommand("SELECT Resort FROM Login WHERE Username = @Username", connection)) {
 				CheckResortValue.Parameters.AddWithValue("@Username", Session["Username"]);
 
@@ -30,7 +29,7 @@ namespace WordBank {
 					}
 				}
 			}
-
+			connection.Close();
 			if (!IsPostBack) {
 				CheckWordTotal();
 				Clear();
@@ -56,11 +55,13 @@ namespace WordBank {
 			else if (Session["SelectedAnswer"].ToString().Equals(Session["Answer"].ToString())) {
 				Responselbl.Attributes.Add("class", "alert alert-success");
 				Responselbl.Text = "Correct! Here's a new definition";
+				connection.Open();
 				using (SqlCommand CorrectAnswerUpdate = new SqlCommand("UPDATE WordBank SET CorrectDefinition = CorrectDefinition + 1, LastDefPractice = GETDATE() WHERE Word = @Word", connection)) {
 					CorrectAnswerUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
 					CorrectAnswerUpdate.ExecuteNonQuery();
 					Session["DefIndex"] = (int)Session["DefIndex"] + 1;
 				}
+				connection.Close();
 
 				Clear();
 				GenerateNewQuestion();
@@ -69,10 +70,12 @@ namespace WordBank {
 				Responselbl.Attributes.Add("class", "alert alert-danger");
 				Responselbl.Text = "Incorrect, Try Again";
 				AnswerList.Items[AnswerList.SelectedIndex].Enabled = false;
+				connection.Open();
 				using (SqlCommand AttemptUpdate = new SqlCommand("UPDATE WordBank SET IncorrectDefinition = IncorrectDefinition + 1, LastDefPractice = GETDATE() WHERE Word = @Word", connection)) {
 					AttemptUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
 					AttemptUpdate.ExecuteNonQuery();
 				}
+				connection.Close();
 			}
 		}
 
@@ -89,6 +92,7 @@ namespace WordBank {
 			}
 
 			if (index == (resortValue - 1) || index == 0) {
+				connection.Open();
 				using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 10 Word, Definition, Sentence1, (CorrectDefinition - IncorrectDefinition) AS Difference FROM WordBank WHERE Username = @Username ORDER BY Difference ASC", connection)) {
 					PracticeWord.Parameters.AddWithValue("@Username", Session["Username"]);
 
@@ -101,6 +105,7 @@ namespace WordBank {
 						}
 					}
 				}
+				connection.Close();
 				Session["DefIndex"] = 0;
 				Session["WordArray"] = Word;
 				Session["DefinitionArray"] = Definition;
@@ -140,7 +145,7 @@ namespace WordBank {
 			List<ListItem> Answers = new List<ListItem>();
 
 			Answers.Add(new ListItem(Word[index]));
-
+			connection.Open();
 			using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 3 Word, Definition, Sentence1 FROM WordBank WHERE Username = @Username ORDER BY NEWID()", connection)) {
 				PracticeWord.Parameters.AddWithValue("@Username", Session["Username"]);
 				using (SqlDataReader DataReader = PracticeWord.ExecuteReader()) {
@@ -154,7 +159,7 @@ namespace WordBank {
 					}
 				}
 			}
-
+			connection.Close();
 
 
 			foreach (int num in numbers) {
@@ -163,6 +168,7 @@ namespace WordBank {
 		}
 
 		protected void CheckWordTotal() {
+			connection.Open();
 			using (SqlCommand WordCheck = new SqlCommand("SELECT COUNT(*) FROM WordBank WHERE Username = @Username", connection)) {
 				WordCheck.Parameters.AddWithValue("@Username", Session["Username"]);
 				int WordAmount = (int)WordCheck.ExecuteScalar();
@@ -171,6 +177,7 @@ namespace WordBank {
 					Response.Redirect("Input.aspx");
 				}
 			}
+			connection.Close();
 		}
 
 		protected void HintBtn_Click(object sender, EventArgs e) {

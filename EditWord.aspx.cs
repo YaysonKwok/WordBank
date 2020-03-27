@@ -9,7 +9,7 @@ using System.Web.UI.WebControls;
 
 namespace WordBank {
 	public partial class EditWord : System.Web.UI.Page {
-		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
+		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank"].ConnectionString);
 		protected void Page_Load(object sender, EventArgs e) {
 			if (Session["Username"] == null) {
 				string OriginalUrl = HttpContext.Current.Request.RawUrl;
@@ -19,14 +19,13 @@ namespace WordBank {
 
 			if (!IsPostBack) {
 				LoadData();
-
 			}
 		}
 
 		private void LoadData() {
+			connection.Open();
 			using (SqlCommand LoadData = new SqlCommand("SELECT Word, Definition, Sentence1, Sentence2, Informal FROM WordBank WHERE ID = @WordID", connection)) {
 				LoadData.Parameters.AddWithValue("@WordID", Session["WordID"]);
-				connection.Open();
 				using (var reader = LoadData.ExecuteReader()) {
 					while (reader.Read()) {
 						WordInput.Text = reader.GetString(reader.GetOrdinal("Word"));
@@ -45,6 +44,7 @@ namespace WordBank {
 		}
 
 		protected void EditWord_Click(object sender, EventArgs e) {
+			connection.Open();
 			using (SqlCommand Edit = new SqlCommand("Update WordBank Set Word = @Word, Definition = @Definition, Sentence1 = @Sentence1, Sentence2 = @Sentence2, Informal = @Informal WHERE ID = @WordID", connection)) {
 				Edit.Parameters.AddWithValue("@Word", WordInput.Text);
 				Edit.Parameters.AddWithValue("@Definition", DefinitionInput.Text);

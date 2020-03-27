@@ -7,7 +7,7 @@ using System.Web.UI;
 
 namespace WordBank.Account {
 	public partial class Login : Page {
-		readonly static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
+		readonly static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank"].ConnectionString);
 
 		protected void Page_Load(object sender, EventArgs e) {
 			if (Session["Username"] != null) {

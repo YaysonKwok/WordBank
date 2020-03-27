@@ -8,7 +8,7 @@ namespace WordBank.Account
 {
     public partial class Register : Page
     {
-		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
+		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank"].ConnectionString);
 
 		protected void Page_Load(object sender, EventArgs e) {
 

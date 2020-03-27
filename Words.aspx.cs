@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace WordBank {
 	public partial class Words : System.Web.UI.Page {
-		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
+		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank"].ConnectionString);
 		private const string ASCENDING = " ASC";
 		private const string DESCENDING = " DESC";
 

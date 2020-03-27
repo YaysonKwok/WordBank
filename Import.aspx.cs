@@ -8,7 +8,7 @@ using Microsoft.VisualBasic.FileIO;
 
 namespace WordBank {
 	public partial class Import : System.Web.UI.Page {
-		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
+		static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank"].ConnectionString);
 		static string Username = "Username";
 		DataColumn Word = new DataColumn("Word");
 		DataColumn Definition = new DataColumn("Definition");
@@ -110,6 +110,7 @@ namespace WordBank {
 			else {
 				UploadFailed.Text = "You need to select a file!";
 			}
+			connection.Close();
 		}
 		protected void Page_Unload(object sender, EventArgs e) {
 			connection.Close();

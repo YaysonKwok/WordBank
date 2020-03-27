@@ -11,15 +11,15 @@ using System.Web.UI.WebControls;
 
 namespace WordBank {
 	public partial class WordPractice : Page {
-		readonly static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank.Properties.Settings.ConnectionString"].ConnectionString);
+		readonly static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank"].ConnectionString);
 		string[] Word = new string[10];
 		string[] Definition = new string[10];
 		string[] Hint = new string[10];
 
 		protected void Page_Load(object sender, EventArgs e) {
-			connection.Open();
 			CheckLoggedIn();
 
+			connection.Open();
 			using (SqlCommand CheckResortValue = new SqlCommand("SELECT Resort FROM Login WHERE Username = @Username", connection)) {
 				CheckResortValue.Parameters.AddWithValue("@Username", Session["Username"]);
 
@@ -30,6 +30,8 @@ namespace WordBank {
 					}
 				}
 			}
+			connection.Close();
+
 			if (!IsPostBack) {
 				CheckWordTotal();
 				Clear();
@@ -46,6 +48,7 @@ namespace WordBank {
 		}
 
 		private void CheckWordTotal() {
+			connection.Open();
 			using (SqlCommand WordCheck = new SqlCommand("SELECT COUNT(*) FROM WordBank WHERE Username = @Username", connection)) {
 				WordCheck.Parameters.AddWithValue("@Username", Session["Username"]);
 				int WordAmount = (int)WordCheck.ExecuteScalar();
@@ -54,9 +57,11 @@ namespace WordBank {
 					Response.Redirect("Input.aspx");
 				}
 			}
+			connection.Close();
 		}
 
 		protected void SubmitBtn_Click(object sender, EventArgs e) {
+			connection.Open();
 			Session["SelectedAnswer"] = AnswerList.SelectedValue;
 
 			if (AnswerList.SelectedIndex == -1) {
@@ -92,12 +97,10 @@ namespace WordBank {
 						HintIncUpdate.ExecuteNonQuery();
 					}
 				}
-
 				Clear();
 				GenerateNewQuestion();
 			}
 			else {
-
 				Responselbl.Attributes.Add("class", "alert alert-danger");
 				Responselbl.Text = "Incorrect, Try Again";
 				AnswerList.Items[AnswerList.SelectedIndex].Enabled = false;
@@ -106,9 +109,11 @@ namespace WordBank {
 					AttemptUpdate.ExecuteNonQuery();
 				}
 			}
+			connection.Close();
 		}
 
 		protected void GenerateNewQuestion() {
+			connection.Open();
 			HintLbl.Visible = false;
 
 			int index = (int)Session["WordIndex"];
@@ -177,7 +182,7 @@ namespace WordBank {
 			foreach (int num in numbers) {
 				AnswerList.Items.Add(Answers[num - 1]);
 			}
-
+			connection.Close();
 		}
 		protected void Clear() {
 			AnswerList.Items.Clear();

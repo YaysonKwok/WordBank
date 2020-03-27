@@ -189,6 +189,7 @@
     <Content Include="Account\Web.config" />
     <Content Include="WordPractice.aspx" />
     <Content Include="Words.aspx" />
+    <Content Include="connections.config" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\WordBank - Web Deploy.pubxml" />

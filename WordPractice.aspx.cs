@@ -61,7 +61,6 @@ namespace WordBank {
 		}
 
 		protected void SubmitBtn_Click(object sender, EventArgs e) {
-			connection.Open();
 			Session["SelectedAnswer"] = AnswerList.SelectedValue;
 
 			if (AnswerList.SelectedIndex == -1) {
@@ -71,6 +70,7 @@ namespace WordBank {
 			else if (Session["SelectedAnswer"].ToString().Equals(Session["Answer"].ToString())) {
 				Responselbl.Attributes.Add("class", "alert alert-success");
 				Responselbl.Text = "Correct! Here's a new word";
+				connection.Open();
 				using (SqlCommand CorrectAnswerUpdate = new SqlCommand("UPDATE WordBank SET CorrectWord = CorrectWord + 1, LastWordPractice = GETDATE() WHERE Word = @Word AND Username = @Username", connection)) {
 					CorrectAnswerUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
 					CorrectAnswerUpdate.Parameters.AddWithValue("@Username", Session["Username"]);
@@ -84,21 +84,17 @@ namespace WordBank {
 				}
 
 				if (HintLbl.Visible == true) {
-					connection.Open();
-					using (SqlCommand HintIncUpdate = new SqlCommand("UPDATE WordBank SET Sen_hint_inc = Sen_hint_inc + 1 WHERE Word = @Word AND Username = @Username")) {
+					using (SqlCommand HintIncUpdate = new SqlCommand("UPDATE WordBank SET Sen_hint_inc = Sen_hint_inc + 1 WHERE Word = @Word AND Username = @Username", connection)) {
 						HintIncUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
 						HintIncUpdate.Parameters.AddWithValue("@Username", Session["Username"]);
 						HintIncUpdate.ExecuteNonQuery();
 					}
-					connection.Close();
 				}
 				else {
-					connection.Open();
-					using (SqlCommand HintIncUpdate = new SqlCommand("UPDATE WordBank SET Sen_hint_dec = CASE WHEN Sen_hint_dec < Sen_hint_inc THEN Sen_hint_dec + 1 ELSE Sen_hint_dec END WHERE Word = @Word AND Username = @Username")) {
+					using (SqlCommand HintIncUpdate = new SqlCommand("UPDATE WordBank SET Sen_hint_dec = CASE WHEN Sen_hint_dec < Sen_hint_inc THEN Sen_hint_dec + 1 ELSE Sen_hint_dec END WHERE Word = @Word AND Username = @Username", connection)) {
 						HintIncUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
 						HintIncUpdate.Parameters.AddWithValue("@Username", Session["Username"]);
 						HintIncUpdate.ExecuteNonQuery();
-						connection.Close();
 					}
 				}
 				Clear();
@@ -117,7 +113,10 @@ namespace WordBank {
 		}
 
 		protected void GenerateNewQuestion() {
-			connection.Open();
+			if (connection.State != ConnectionState.Open) {
+				connection.Close();
+				connection.Open();
+			}
 			HintLbl.Visible = false;
 
 			int index = (int)Session["WordIndex"];

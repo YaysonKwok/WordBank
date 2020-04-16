@@ -35,6 +35,7 @@ namespace WordBank {
 				Clear();
 				GenerateNewQuestion();
 			}
+      SubmittedAnswer.Focus();
 		}
 
 		protected void SubmitBtn_Click(object sender, EventArgs e) {

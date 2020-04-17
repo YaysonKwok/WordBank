@@ -4,6 +4,7 @@
     <asp:Panel ID="Panel1" runat="server" DefaultButton="SubmitBtn">
         <br />
         Enter the correct word/phrase that fits this definition.
+        &nbsp;<asp:Label ID="ResortLbl" runat="server" Text="Label" ForeColor="#999999"></asp:Label>
         <br />
         <br />
         Definition:

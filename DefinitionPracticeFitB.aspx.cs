@@ -18,7 +18,7 @@ namespace WordBank {
 		char[] hintArray;
 
 		protected void Page_Load(object sender, EventArgs e) {
-			CheckLoggedIn();
+      CheckLoggedIn();
 			connection.Open();
 			using (SqlCommand CheckResortValue = new SqlCommand("SELECT Resort FROM Login WHERE Username = @Username", connection)) {
 				CheckResortValue.Parameters.AddWithValue("@Username", Session["Username"]);
@@ -35,7 +35,7 @@ namespace WordBank {
 				Clear();
 				GenerateNewQuestion();
 			}
-      SubmittedAnswer.Focus();
+      SubmittedAnswer.Focus(); // Canny, v0.1.1
 		}
 
 		protected void SubmitBtn_Click(object sender, EventArgs e) {
@@ -115,28 +115,36 @@ namespace WordBank {
 				Definition = (string[])Session["DefinitionArray"];
 				Hint = (string[])Session["HintArray"];
 			}
+      ResortLbl.Text = ""; // Canny: v0.1.2, Indicates whether there's a resort event.
+      if (index == resortValue || index == 0) { // Canny: v0.1.2, Changed from (resortValue-1)
+        connection.Open();
 
-			if (index == (resortValue - 1) || index == 0) {
-				connection.Open();
-				using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 10 Word, Definition, Sentence1, (CorrectDefinition - IncorrectDefinition) AS Difference FROM WordBank WHERE Username = @Username ORDER BY Difference ASC", connection)) {
-					PracticeWord.Parameters.AddWithValue("@Username", Session["Username"]);
+        // Canny v0.1.2, Added resortValue 
+        string sqlStmt = $"SELECT TOP {resortValue} Word, Definition, Sentence1, (CorrectDefinition - IncorrectDefinition) AS Difference FROM WordBank WHERE Username = @Username ORDER BY Difference ASC";
+        using (SqlCommand PracticeWord = new SqlCommand(sqlStmt, connection)) {
+          PracticeWord.Parameters.AddWithValue("@Username", Session["Username"]);
+
 
 					using (SqlDataReader DataReader = PracticeWord.ExecuteReader()) {
-						for (int i = 0; i < 10; i++) {
-							DataReader.Read();
+            for (int i = 0; i < resortValue; i++) { // Canny: 0.1.2, Changed from i < 10
+                DataReader.Read();
 							Word[i] = DataReader.GetString(0);
 							Definition[i] = DataReader.GetString(1);
 							Hint[i] = DataReader.GetString(2);
 						}
 					}
 				}
+        
+
 				connection.Close();
+        ResortLbl.Text = "(Resort)"; // v0.1.2, Indicates a resort event.
+        index = 0; // Canny v0.1.2
 				Session["DefIndex"] = 0;
 				Session["WordArray"] = Word;
 				Session["DefinitionArray"] = Definition;
 				Session["HintArray"] = Hint;
 			}
-
+      
 			Definitionlbl.Text = Definition[index];
 			Session["Word"] = Word[index];
 			Session["Answer"] = Word[index];
@@ -165,6 +173,7 @@ namespace WordBank {
 			}
 			SentenceHintLbl.Text = input;
 			Session["HintButtonIndex"] = 0;
+      
 		}
 
 		private void CheckLoggedIn() {

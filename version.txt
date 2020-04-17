@@ -1,4 +1,0 @@
-Ver
-0.1.0 4/01/20 Created by Jason
-0.1.1 4/16/20 Added SubmittedAnswer.Focus() to DefinitionPracticeFitB.aspx.cs.
-              Added this file for versioning.

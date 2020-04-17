@@ -85,7 +85,7 @@
             </asp:ContentPlaceHolder>
             <hr />
             <footer>
-                <p>  &copy; 2019 - <%: DateTime.Now.Year %> - WordBank</p>
+                <p>  &copy; 2019 - <%: DateTime.Now.Year %> - WordBank <%: ConfigurationManager.AppSettings["version"] %></p>
             </footer>
         </div>
     </form>

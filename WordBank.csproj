@@ -191,6 +191,7 @@
     <Content Include="Words.aspx" />
     <Content Include="connections.config" />
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\WordBank - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
@@ -418,6 +419,7 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
     <Content Include="Site.Master" />
     <Content Include="Site.Mobile.Master" />
+    <Content Include="version.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -52,7 +52,7 @@ namespace WordBank {
 				Edit.Parameters.AddWithValue("@Sentence2", Sentence2Input.Text);
 				Edit.Parameters.AddWithValue("@Informal", InformalCheckBox.Checked);
 				Edit.Parameters.AddWithValue("@WordID", Session["WordID"]);
-				connection.Open();
+				// connection.Open(); Canny: v0.1.3, Opening twice caused "The connection was not closed" exception.
 				try {
 					Edit.ExecuteNonQuery();
 					SubmitResponse.Attributes.Add("class", "alert alert-success");

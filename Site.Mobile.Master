@@ -11,11 +11,11 @@
 <body>
     <form id="form1" runat="server">
         <div class="topnav">
-            <a href="#home" class="active">Logo</a>
+            <a href="~/DefinitionPracticeFitB" class="active">Word bank</a>
             <div id="myLinks">
                 <a href="#news">News</a>
                 <a href="#contact">Contact</a>
-                <a href="#about">About</a>
+                <a id="home" href="~/DefinitionPracticeFitB">Def->Word</a>
             </div>
             <a href="javascript:void(0);" class="icon" onclick="myFunction()">
                 <i class="fa fa-bars"></i>

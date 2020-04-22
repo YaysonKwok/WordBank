@@ -10,7 +10,7 @@ using System.Web.UI.WebControls;
 
 namespace WordBank {
 	public partial class DefinitionPracticeFitB : System.Web.UI.Page {
-
+		protected const string NUM_TOTAL = "NumTotal"; // For Session var name.
 		readonly static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank"].ConnectionString);
 		string[] Word = new string[10];
 		string[] Definition = new string[10];
@@ -31,6 +31,7 @@ namespace WordBank {
 			}
 			connection.Close();
 			if (!IsPostBack) {
+				Session[NUM_TOTAL] = new NumTotal(); // v0.1.4
 				CheckWordTotal();
 				Clear();
 				GenerateNewQuestion();
@@ -59,6 +60,13 @@ namespace WordBank {
 					Session["DefIndex"] = (int)Session["DefIndex"] + 1;
 				}
 				connection.Close();
+
+				// Canny v0.1.4
+				NumTotal numTotal = (NumTotal) Session[NUM_TOTAL];
+				numTotal.Inc(1);
+				Session[NUM_TOTAL] = numTotal;
+				LabelNumTotal.Text = numTotal.toStr();
+
 				Clear();
 				GenerateNewQuestion();
 			}
@@ -72,6 +80,13 @@ namespace WordBank {
 					AttemptUpdate.ExecuteNonQuery();
 				}
 				connection.Close();
+
+				// Canny v0.1.4
+				NumTotal numTotal = (NumTotal)Session[NUM_TOTAL];
+				numTotal.Inc(0);
+				Session[NUM_TOTAL] = numTotal;
+				LabelNumTotal.Text = numTotal.toStr();
+				
 				SubmittedAnswer.Text = "";
 			}
 		}

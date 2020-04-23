@@ -5,6 +5,7 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <br />
     Please select the correct definition:
+    <asp:Label ID="ResortLbl" runat="server"></asp:Label>
     <br />
     <br />
     Word:
@@ -20,6 +21,8 @@
     </asp:RadioButtonList>
     <br />
     <asp:Button ID="SubmitBtn" runat="server" Text="Submit Answer" OnClick="SubmitBtn_Click"  CssClass="btn btn-primary"/>
+    &nbsp;
+  <asp:Label ID="LabelNumTotal" runat="server" Text=""></asp:Label>
     <br />
     <br />
     <asp:Label ID="Responselbl" runat="server"></asp:Label>

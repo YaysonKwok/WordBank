@@ -11,6 +11,7 @@ using System.Web.UI.WebControls;
 
 namespace WordBank {
 	public partial class WordPractice : Page {
+		const string NumTotal_word2def = "NumTotal_word2def";
 		readonly static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank"].ConnectionString);
 		string[] Word = new string[10];
 		string[] Definition = new string[10];
@@ -33,6 +34,8 @@ namespace WordBank {
 			connection.Close();
 
 			if (!IsPostBack) {
+				Session[NumTotal_word2def] = new NumTotal(); // v0.15
+
 				CheckWordTotal();
 				Clear();
 				GenerateNewQuestion();
@@ -70,6 +73,8 @@ namespace WordBank {
 			else if (Session["SelectedAnswer"].ToString().Equals(Session["Answer"].ToString())) {
 				Responselbl.Attributes.Add("class", "alert alert-success");
 				Responselbl.Text = "Correct! Here's a new word";
+				LabelNumTotal.Text = NumTotal.Inc(Session, NumTotal_word2def, 1); // Canny v0.15
+
 				connection.Open();
 				using (SqlCommand CorrectAnswerUpdate = new SqlCommand("UPDATE WordBank SET CorrectWord = CorrectWord + 1, LastWordPractice = GETDATE() WHERE Word = @Word AND Username = @Username", connection)) {
 					CorrectAnswerUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
@@ -99,15 +104,17 @@ namespace WordBank {
 				}
 				Clear();
 				GenerateNewQuestion();
-			}
-			else {
+			} else {
 				Responselbl.Attributes.Add("class", "alert alert-danger");
 				Responselbl.Text = "Incorrect, Try Again";
+				LabelNumTotal.Text = NumTotal.Inc(Session, NumTotal_word2def, 0); // Canny v0.15
 				AnswerList.Items[AnswerList.SelectedIndex].Enabled = false;
 				using (SqlCommand AttemptUpdate = new SqlCommand("UPDATE WordBank SET IncorrectWord = IncorrectWord + 1, LastWordPractice = GETDATE() WHERE Word = @Word", connection)) {
 					AttemptUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
 					AttemptUpdate.ExecuteNonQuery();
 				}
+				LabelNumTotal.Text = NumTotal.Inc(Session, NumTotal_word2def, 0); // Canny v0.15
+
 			}
 			connection.Close();
 		}
@@ -186,6 +193,8 @@ namespace WordBank {
 				AnswerList.Items.Add(Answers[num - 1]);
 			}
 			connection.Close();
+			ResortLbl.Text = "(resort)";
+
 		}
 		protected void Clear() {
 			AnswerList.Items.Clear();

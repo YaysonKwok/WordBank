@@ -10,7 +10,7 @@ using System.Web.UI.WebControls;
 
 namespace WordBank {
 	public partial class DefinitionPracticeFitB : System.Web.UI.Page {
-		protected const string NUM_TOTAL = "NumTotal"; // For Session var name.
+		const string NumTotal_def2word = "NumTotal_def2word";
 		readonly static SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WordBank"].ConnectionString);
 		string[] Word = new string[10];
 		string[] Definition = new string[10];
@@ -31,7 +31,7 @@ namespace WordBank {
 			}
 			connection.Close();
 			if (!IsPostBack) {
-				Session[NUM_TOTAL] = new NumTotal(); // v0.1.4
+				Session[NumTotal_def2word] = new NumTotal(); // v0.15
 				CheckWordTotal();
 				Clear();
 				GenerateNewQuestion();
@@ -53,6 +53,7 @@ namespace WordBank {
 			else if (Session["SelectedAnswer"].ToString().Equals(Session["Answer"].ToString())) {
 				Responselbl.Attributes.Add("class", "alert alert-success");
 				Responselbl.Text = "Correct! Here's a new definition";
+				LabelNumTotal.Text = NumTotal.Inc(Session, NumTotal_def2word, 1); // Canny v0.15
 				connection.Open();
 				using (SqlCommand CorrectAnswerUpdate = new SqlCommand("UPDATE WordBank SET CorrectDefinition = CorrectDefinition + 1, LastDefPractice = GETDATE() WHERE Word = @Word", connection)) {
 					CorrectAnswerUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
@@ -61,11 +62,6 @@ namespace WordBank {
 				}
 				connection.Close();
 
-				// Canny v0.1.4
-				NumTotal numTotal = (NumTotal) Session[NUM_TOTAL];
-				numTotal.Inc(1);
-				Session[NUM_TOTAL] = numTotal;
-				LabelNumTotal.Text = numTotal.toStr();
 
 				Clear();
 				GenerateNewQuestion();
@@ -73,6 +69,7 @@ namespace WordBank {
 			else {
 				Responselbl.Attributes.Add("class", "alert alert-danger");
 				Responselbl.Text = "Incorrect, Try Again";
+				LabelNumTotal.Text = NumTotal.Inc(Session, NumTotal_def2word, 0); // Canny v0.15
 				SubmittedAnswer.Text = "";
 				connection.Open();
 				using (SqlCommand AttemptUpdate = new SqlCommand("UPDATE WordBank SET IncorrectDefinition = IncorrectDefinition + 1, LastDefPractice = GETDATE() WHERE Word = @Word", connection)) {
@@ -80,13 +77,8 @@ namespace WordBank {
 					AttemptUpdate.ExecuteNonQuery();
 				}
 				connection.Close();
-
-				// Canny v0.1.4
-				NumTotal numTotal = (NumTotal)Session[NUM_TOTAL];
-				numTotal.Inc(0);
-				Session[NUM_TOTAL] = numTotal;
-				LabelNumTotal.Text = numTotal.toStr();
 				
+
 				SubmittedAnswer.Text = "";
 			}
 		}

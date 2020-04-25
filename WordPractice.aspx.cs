@@ -20,6 +20,18 @@ namespace WordBank {
 		protected void Page_Load(object sender, EventArgs e) {
 			CheckLoggedIn();
 
+			CheckResortValue();
+
+			if (!IsPostBack) {
+				Session[NumTotal_word2def] = new NumTotal(); // v0.15
+
+				CheckWordTotal();
+				Clear();
+				GenerateNewQuestion();
+			}
+		}
+
+		private void CheckResortValue() {
 			connection.Open();
 			using (SqlCommand CheckResortValue = new SqlCommand("SELECT Resort FROM Login WHERE Username = @Username", connection)) {
 				CheckResortValue.Parameters.AddWithValue("@Username", Session["Username"]);
@@ -32,14 +44,6 @@ namespace WordBank {
 				}
 			}
 			connection.Close();
-
-			if (!IsPostBack) {
-				Session[NumTotal_word2def] = new NumTotal(); // v0.15
-
-				CheckWordTotal();
-				Clear();
-				GenerateNewQuestion();
-			}
 		}
 
 		private void CheckLoggedIn() {
@@ -74,34 +78,8 @@ namespace WordBank {
 				Responselbl.Attributes.Add("class", "alert alert-success");
 				Responselbl.Text = "Correct! Here's a new word";
 				LabelNumTotal.Text = NumTotal.Inc(Session, NumTotal_word2def, 1); // Canny v0.15
-
-				connection.Open();
-				using (SqlCommand CorrectAnswerUpdate = new SqlCommand("UPDATE WordBank SET CorrectWord = CorrectWord + 1, LastWordPractice = GETDATE() WHERE Word = @Word AND Username = @Username", connection)) {
-					CorrectAnswerUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
-					CorrectAnswerUpdate.Parameters.AddWithValue("@Username", Session["Username"]);
-					CorrectAnswerUpdate.ExecuteNonQuery();
-					if ((int)Session["WordIndex"] == 9) {
-						Session["WordIndex"] = 0;
-					}
-					else {
-						Session["WordIndex"] = (int)Session["WordIndex"] + 1;
-					}
-				}
-
-				if (HintLbl.Visible == true) {
-					using (SqlCommand HintIncUpdate = new SqlCommand("UPDATE WordBank SET Sen_hint_inc = Sen_hint_inc + 1 WHERE Word = @Word AND Username = @Username", connection)) {
-						HintIncUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
-						HintIncUpdate.Parameters.AddWithValue("@Username", Session["Username"]);
-						HintIncUpdate.ExecuteNonQuery();
-					}
-				}
-				else {
-					using (SqlCommand HintIncUpdate = new SqlCommand("UPDATE WordBank SET Sen_hint_dec = CASE WHEN Sen_hint_dec < Sen_hint_inc THEN Sen_hint_dec + 1 ELSE Sen_hint_dec END WHERE Word = @Word AND Username = @Username", connection)) {
-						HintIncUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
-						HintIncUpdate.Parameters.AddWithValue("@Username", Session["Username"]);
-						HintIncUpdate.ExecuteNonQuery();
-					}
-				}
+				CorrectAnswerUpdate();
+				HintIncUpdate();
 				Clear();
 				GenerateNewQuestion();
 			} else {
@@ -109,21 +87,57 @@ namespace WordBank {
 				Responselbl.Text = "Incorrect, Try Again";
 				LabelNumTotal.Text = NumTotal.Inc(Session, NumTotal_word2def, 0); // Canny v0.15
 				AnswerList.Items[AnswerList.SelectedIndex].Enabled = false;
-				using (SqlCommand AttemptUpdate = new SqlCommand("UPDATE WordBank SET IncorrectWord = IncorrectWord + 1, LastWordPractice = GETDATE() WHERE Word = @Word", connection)) {
-					AttemptUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
-					AttemptUpdate.ExecuteNonQuery();
-				}
+				AttemptUpdate();
 				LabelNumTotal.Text = NumTotal.Inc(Session, NumTotal_word2def, 0); // Canny v0.15
 
+			}
+		}
+
+		private void AttemptUpdate() {
+			connection.Open();
+			using (SqlCommand AttemptUpdate = new SqlCommand("UPDATE WordBank SET IncorrectWord = IncorrectWord + 1, LastWordPractice = GETDATE() WHERE Word = @Word", connection)) {
+				AttemptUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
+				AttemptUpdate.ExecuteNonQuery();
+			}
+			connection.Close();
+		}
+
+		private void HintIncUpdate() {
+			connection.Open();
+			if (HintLbl.Visible == true) {
+				using (SqlCommand HintIncUpdate = new SqlCommand("UPDATE WordBank SET Sen_hint_inc = Sen_hint_inc + 1 WHERE Word = @Word AND Username = @Username", connection)) {
+					HintIncUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
+					HintIncUpdate.Parameters.AddWithValue("@Username", Session["Username"]);
+					HintIncUpdate.ExecuteNonQuery();
+				}
+			}
+			else {
+				using (SqlCommand HintIncUpdate = new SqlCommand("UPDATE WordBank SET Sen_hint_dec = CASE WHEN Sen_hint_dec < Sen_hint_inc THEN Sen_hint_dec + 1 ELSE Sen_hint_dec END WHERE Word = @Word AND Username = @Username", connection)) {
+					HintIncUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
+					HintIncUpdate.Parameters.AddWithValue("@Username", Session["Username"]);
+					HintIncUpdate.ExecuteNonQuery();
+				}
+			}
+			connection.Close();
+		}
+
+		private void CorrectAnswerUpdate() {
+			connection.Open();
+			using (SqlCommand CorrectAnswerUpdate = new SqlCommand("UPDATE WordBank SET CorrectWord = CorrectWord + 1, LastWordPractice = GETDATE() WHERE Word = @Word AND Username = @Username", connection)) {
+				CorrectAnswerUpdate.Parameters.AddWithValue("@Word", Session["Word"].ToString());
+				CorrectAnswerUpdate.Parameters.AddWithValue("@Username", Session["Username"]);
+				CorrectAnswerUpdate.ExecuteNonQuery();
+				if ((int)Session["WordIndex"] == 9) {
+					Session["WordIndex"] = 0;
+				}
+				else {
+					Session["WordIndex"] = (int)Session["WordIndex"] + 1;
+				}
 			}
 			connection.Close();
 		}
 
 		protected void GenerateNewQuestion() {
-			if (connection.State != ConnectionState.Open) {
-				connection.Close();
-				connection.Open();
-			}
 			HintLbl.Visible = false;
 
 			int index = (int)Session["WordIndex"];
@@ -136,48 +150,51 @@ namespace WordBank {
 			}
 
 			if (index == (resortValue-1) || index == 0) {
-				using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 10 Word, Definition, Sentence1, (CorrectWord - IncorrectWord) AS WordDifference, (Sen_hint_dec - Sen_hint_inc) As HintDifference FROM WordBank WHERE Username = @Username ORDER BY WordDifference ASC, HintDifference ASC ", connection)) {
-					PracticeWord.Parameters.AddWithValue("@Username", Session["Username"]);
-
-					using (SqlDataReader DataReader = PracticeWord.ExecuteReader()) {
-						for (int i = 0; i < 10; i++) {
-							DataReader.Read();
-							Word[i] = DataReader.GetString(0);
-							Definition[i] = DataReader.GetString(1);
-							Hint[i] = DataReader.GetString(2);
-						}
-					}
-				}
-				Session["WordIndex"] = 0;
-				Session["WordArray"] = Word;
-				Session["DefinitionArray"] = Definition;
-				Session["HintArray"] = Hint;
+				PracticeWord();
 			}
 
 			Wordlbl.Text = Word[index];
 			Session["Word"] = Wordlbl.Text;
 			Session["Answer"] = Definition[index];
-			string input = Hint[index];
-			string[] sKeywords = Wordlbl.Text.Split(' ');
-			foreach (string sKeyword in sKeywords) {
-				try {
-					input = Regex.Replace(input, sKeyword, string.Format("<span style=\"background-color:yellow\">{0}</span>", "$0"), RegexOptions.IgnoreCase);
-				}
-				catch {
-					//
-				}
-			}
-			HintLbl.Text = input;
 
-			Random ran = new Random();
-			var numbers = Enumerable.Range(1, 4).OrderBy(i => ran.Next()).ToList();
+			GenerateHint(index);
+
 			List<ListItem> Answers = new List<ListItem>();
-
 			Answers.Add(new ListItem(Definition[index]));
 
-			using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 3 Word, Definition, Sentence1 FROM WordBank WHERE Username = @Username ORDER BY NEWID()", connection)) {
+			GenerateWrongAnswers(Answers);
+			ResortLbl.Text = "(resort)";
+		}
+
+		private void PracticeWord() {
+			connection.Open();
+			using (SqlCommand PracticeWord = new SqlCommand("SELECT TOP 10 Word, Definition, Sentence1, (CorrectWord - IncorrectWord) AS WordDifference, (Sen_hint_dec - Sen_hint_inc) As HintDifference FROM WordBank WHERE Username = @Username ORDER BY WordDifference ASC, HintDifference ASC ", connection)) {
 				PracticeWord.Parameters.AddWithValue("@Username", Session["Username"]);
+
 				using (SqlDataReader DataReader = PracticeWord.ExecuteReader()) {
+					for (int i = 0; i < 10; i++) {
+						DataReader.Read();
+						Word[i] = DataReader.GetString(0);
+						Definition[i] = DataReader.GetString(1);
+						Hint[i] = DataReader.GetString(2);
+					}
+				}
+			}
+			Session["WordIndex"] = 0;
+			Session["WordArray"] = Word;
+			Session["DefinitionArray"] = Definition;
+			Session["HintArray"] = Hint;
+			connection.Close();
+		}
+
+		private void GenerateWrongAnswers(List<ListItem> Answers) {
+			Random ran = new Random();
+			var numbers = Enumerable.Range(1, 4).OrderBy(i => ran.Next()).ToList();
+
+			connection.Open();
+			using (SqlCommand WrongAnswers = new SqlCommand("SELECT TOP 3 Word, Definition, Sentence1 FROM WordBank WHERE Username = @Username ORDER BY NEWID()", connection)) {
+				WrongAnswers.Parameters.AddWithValue("@Username", Session["Username"]);
+				using (SqlDataReader DataReader = WrongAnswers.ExecuteReader()) {
 					if (DataReader != null) {
 						DataReader.Read();
 						Answers.Add(new ListItem(DataReader.GetString(1)));
@@ -193,9 +210,22 @@ namespace WordBank {
 				AnswerList.Items.Add(Answers[num - 1]);
 			}
 			connection.Close();
-			ResortLbl.Text = "(resort)";
-
 		}
+
+		private void GenerateHint(int index) {
+			string input = Hint[index];
+			string[] sKeywords = Wordlbl.Text.Split(' ');
+			foreach (string sKeyword in sKeywords) {
+				try {
+					input = Regex.Replace(input, sKeyword, string.Format("<span style=\"background-color:yellow\">{0}</span>", "$0"), RegexOptions.IgnoreCase);
+				}
+				catch {
+					//
+				}
+			}
+			HintLbl.Text = input;
+		}
+
 		protected void Clear() {
 			AnswerList.Items.Clear();
 		}

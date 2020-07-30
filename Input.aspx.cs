@@ -36,7 +36,7 @@ namespace WordBank {
 				connection.Open();
 				using (SqlCommand WordCheck = new SqlCommand("SELECT COUNT(*) FROM WordBank WHERE Username = @Username AND Word = @WordCheck", connection)) {
 					WordCheck.Parameters.AddWithValue("@Username", Session["Username"]);
-					WordCheck.Parameters.AddWithValue("@WordCheck", WordInput.Text);
+					WordCheck.Parameters.AddWithValue("@WordCheck", Server.HtmlEncode(WordInput.Text));
 					WordCheck.ExecuteScalar();
 
 					if ((int)WordCheck.ExecuteScalar() != 1) {
